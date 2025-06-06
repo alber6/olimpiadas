@@ -1,0 +1,48 @@
+nav {
+    height: 20vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 3rem;
+    gap: 15px;
+    flex-wrap: wrap;
+    font-weight: bolder;
+    margin-bottom: 100px;
+  }
+
+  nav > a > img {
+    width: 150px;
+  }
+
+  nav li:hover {
+    color: var(--highlight);
+    transform: scale(1.1);
+    transition: 1s ease;
+  }
+  
+  @media (max-width: 770px) {
+    nav {
+      padding: 0 2rem;
+    }
+  }
+  
+  nav > ul {
+    display: flex;
+    gap: 3rem;
+  }
+  
+  nav button {
+    background: none;
+    border: none;
+    color: inherit;
+    transform: scale(1.5);
+  }
+  
+  nav a {
+    transition: all 0.3s ease-in-out;
+  }
+  
+  nav a:hover {
+    color: var(--highlight);
+  }
+

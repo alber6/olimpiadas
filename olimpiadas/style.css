@@ -1,0 +1,54 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap");
+
+:root {
+  --primary-dark: rgb(0, 0, 0);
+  --bg-dark: #ffffff;
+  --primary-light: #ffffff;
+  --bg-light: whitesmoke;
+  --highlight: rgb(149, 149, 149);
+}
+
+.home, .projects, footer, nav{
+  font-family: "Roboto", sans-serif;
+  font-size: 1.1rem;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+li {
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--primary-dark);
+  transition: all 1s ease-in-out;
+}
+
+.light {
+  background-color: var(--bg-light);
+  color: var(--primary-light);
+}
+
+main {
+  min-height: 180vh;
+}
+
+@media screen and (max-width: 550px) {
+  .home, .projects, footer, button, nav{
+    font-size: 12px;
+  }
+}
