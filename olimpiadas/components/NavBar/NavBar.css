@@ -19,6 +19,12 @@ nav {
     transform: scale(1.1);
     transition: 1s ease;
   }
+   nav li a {
+    background-color: aqua;
+  }
+  nav li a:target {
+    background-color: rgb(0, 0, 0);
+  }
   
   @media (max-width: 770px) {
     nav {
@@ -46,3 +52,24 @@ nav {
     color: var(--highlight);
   }
 
+
+  
+
+.enlace {
+  display: inline-block;
+  padding: 10px 16px;
+  background-color: #bde0fe;
+  color: #333;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background-color 0.3s;
+}
+
+.enlace:hover {
+  background-color: #a2d2ff;
+}
+
+.enlace.activo {
+  background-color: #ffc6ff;
+  color: white;
+}
