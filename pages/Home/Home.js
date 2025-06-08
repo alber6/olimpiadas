@@ -1,5 +1,5 @@
 import "./Home.css";
-import { cleanPage } from "../../utils/cleanpage/";
+import { cleanPage } from "../../utils/cleanPage";
 
 ////se hace una funcion para acceder a las puntuaciones de cada juego que se encuentran guardadado en TEAM.JS
 function getGameScores(prefix, count) {
