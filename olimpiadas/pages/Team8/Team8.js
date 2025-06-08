@@ -1,14 +1,14 @@
 import { cleanPage} from "../../utils/cleanPage/"
-
+import "./team8.css"
 
 export const Team8= () => {
     const main = document.querySelector("main");
     cleanPage(main);
 
-    main.innerHTML = `
-    <div>
-        <div class = grupos>
-        <h2>Profesores --> ________________ </h2>
+     main.innerHTML = `
+    <div id = container-puntos8>
+        <div class = grupos8>
+        <h2>Equipos 8 - Profesores -->  </h2>
         <ul class = players>
             <li>Jugador 1 </li>
             <li>Jugador 2 </li>
@@ -27,7 +27,7 @@ export const Team8= () => {
             <li>Jugador 15 </li>
         </ul>
         </div>
-        <div class = puntuacion>
+        <div class = grupos8>
         <h2>Puntos Día 1</h2>
             <div>
             <input type="number" id="team8num1" placeholder="Juego 1" required>
@@ -50,9 +50,32 @@ export const Team8= () => {
             <p class="resultado" id="team8result4"></p>
             </div>
         </div>
+        <div class = grupos8>
+        <h2>Puntos Día 2</h2>
+            <div>
+            <input type="number" id="team8num5" placeholder="Juego 1" required>
+            <button type="button" id="team8btn5" >Guardar</button>
+            <p class="resultado" id="team8result5"></p>
+            </div>
+            <div>
+            <input type="number" id="team8num6" placeholder="Juego 2" required>
+            <button type="button" id="team8btn6" >Guardar</button>
+            <p class="resultado" id="team8result6"></p>
+            </div>
+            <div>
+            <input type="number" id="team8num7" placeholder="Juego 3" required>
+            <button type="button" id="team8btn7" >Guardar</button>
+            <p class="resultado" id="team8result7"></p>
+            </div>
+            <div>
+            <input type="number" id="team8num8" placeholder="Juego 4" required>
+            <button type="button" id="team8btn8" >Guardar</button>
+            <p class="resultado" id="team8result8"></p>
+            </div>
+        </div>
     </div>
     `
-    const nums = [1, 2, 3, 4];
+    const nums = [1, 2, 3, 4, 5, 6, 7, 8];
 
     nums.forEach(num => {
         const input = document.getElementById(`team8num${num}`);

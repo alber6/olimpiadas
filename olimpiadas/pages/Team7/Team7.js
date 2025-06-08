@@ -1,14 +1,14 @@
 import { cleanPage} from "../../utils/cleanPage/"
-
+import "./team7.css"
 
 export const Team7= () => {
     const main = document.querySelector("main");
     cleanPage(main);
 
     main.innerHTML = `
-    <div>
-        <div class = grupos>
-        <h2>Profesores --> ________________ </h2>
+    <div id = container-puntos7>
+        <div class = grupos7>
+        <h2>Equipos 7 - Profesores --></h2>
         <ul class = players>
             <li>Jugador 1 </li>
             <li>Jugador 2 </li>
@@ -27,7 +27,7 @@ export const Team7= () => {
             <li>Jugador 15 </li>
         </ul>
         </div>
-        <div class = puntuacion>
+        <div class = grupos7>
         <h2>Puntos Día 1</h2>
             <div>
             <input type="number" id="team7num1" placeholder="Juego 1" required>
@@ -50,9 +50,32 @@ export const Team7= () => {
             <p class="resultado" id="team7result4"></p>
             </div>
         </div>
+        <div class = grupos7>
+        <h2>Puntos Día 2</h2>
+            <div>
+            <input type="number" id="team7num5" placeholder="Juego 1" required>
+            <button type="button" id="team7btn5" >Guardar</button>
+            <p class="resultado" id="team7result5"></p>
+            </div>
+            <div>
+            <input type="number" id="team7num6" placeholder="Juego 2" required>
+            <button type="button" id="team7btn6" >Guardar</button>
+            <p class="resultado" id="team7result6"></p>
+            </div>
+            <div>
+            <input type="number" id="team7num7" placeholder="Juego 3" required>
+            <button type="button" id="team7btn7" >Guardar</button>
+            <p class="resultado" id="team7result7"></p>
+            </div>
+            <div>
+            <input type="number" id="team7num8" placeholder="Juego 4" required>
+            <button type="button" id="team7btn8" >Guardar</button>
+            <p class="resultado" id="team7result8"></p>
+            </div>
+        </div>
     </div>
     `
-    const nums = [1, 2, 3, 4];
+    const nums = [1, 2, 3, 4, 5, 6, 7, 8];
 
     nums.forEach(num => {
         const input = document.getElementById(`team7num${num}`);

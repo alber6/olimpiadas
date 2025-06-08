@@ -8,7 +8,7 @@ export const Team3= () => {
     main.innerHTML = `
     <div id = container-puntos3>
         <div class = grupos3>
-        <h2>Profesores --> ________________ </h2>
+        <h2>Equipos 3 - Profesores --></h2>
         <ul class = players>
             <li>Jugador 1 </li>
             <li>Jugador 2 </li>

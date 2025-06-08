@@ -9,7 +9,7 @@ export const Team2 = () => {
     main.innerHTML = `
     <div id = container-puntos2>
         <div class="grupos2">
-            <h2>Estudiantes --> ________________</h2>
+            <h2>Equipos 2 - Profesores --></h2>
             <ul class="players">
                 <li>Jugador A</li>
                 <li>Jugador B</li>
@@ -48,30 +48,30 @@ export const Team2 = () => {
          <div class="grupos2">
             <h2>Puntos Día 2</h2>
             <div>
-            <input type="number" id="team2num1" placeholder="Juego 1" required>
-            <button type="button" id="team2btn1">Guardar</button>
-            <p class="resultado" id="team2result1"></p>
+            <input type="number" id="team2num5" placeholder="Juego 1" required>
+            <button type="button" id="team2btn5">Guardar</button>
+            <p class="resultado" id="team2result5"></p>
             </div>
             <div>
-           <input type="number" id="team2num2" placeholder="Juego 2" required>
-            <button type="button" id="team2btn2">Guardar</button>
-            <p class="resultado" id="team2result2"></p>
+           <input type="number" id="team2num6" placeholder="Juego 2" required>
+            <button type="button" id="team2btn6">Guardar</button>
+            <p class="resultado" id="team2result6"></p>
             </div>
             <div>
-            <input type="number" id="team2num3" placeholder="Juego 3" required>
-            <button type="button" id="team2btn3">Guardar</button>
-            <p class="resultado" id="team2result3"></p>
+            <input type="number" id="team2num7" placeholder="Juego 3" required>
+            <button type="button" id="team2btn7">Guardar</button>
+            <p class="resultado" id="team2result7"></p>
             </div>
             <div>
-            <input type="number" id="team2num4" placeholder="Juego 4" required>
-            <button type="button" id="team2btn4">Guardar</button>
-            <p class="resultado" id="team2result4"></p>
+            <input type="number" id="team2num8" placeholder="Juego 4" required>
+            <button type="button" id="team2btn8">Guardar</button>
+            <p class="resultado" id="team2result8"></p>
             </div>
         </div>
     </div>
     `;
 
-    const nums = [1, 2, 3, 4];
+    const nums = [1, 2, 3, 4, 5, 6, 7, 8];
 
     nums.forEach(num => {
         const input = document.getElementById(`team2num${num}`);
