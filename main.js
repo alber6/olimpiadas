@@ -1,6 +1,6 @@
 import "./style.css";
 import { linkPage } from "./utils/linkPage";
-import { Navbar } from "./components/Navbar/Navbar";
+import { Navbar } from "./components/NavBar/NavBar";
 import { HomeGames } from "./pages/Home/Home";
 import { Team1 } from "./pages/Team1/Team1";
 import { Team2 } from "./pages/Team2/Team2";
