@@ -10,22 +10,26 @@ export const Team5= () => {
         <div class = grupos5>
         <h2>Equipos 5 - Elena y Teresa</h2>
         <ul class = players>
-            <li>Luna(6)</li>
-            <li>Lucía(5)</li>
-            <li>Joshua(3)</li>
-            <li>África(3)</li>
-            <li>Wenzel(2)</li>
-            <li>Nathan(1)</li>
-            <li>Adriel(4)</li>
-            <li>Zile(5)</li>
-            <li>Izan(6)</li>
-            <li>Guadalupe(2)</li>
-            <li>Victoria(1)</li>
-            <li>Lucía(4)</li>
-            <li>Erick(4)</li>
-            <li>Gustavo Adrián(6)</li>
-            <li>Juan Pablo(4)</li>
+            <li>Analía(6º)</li>
+            <li>Hans(6º)</li>
+            <li>Gabriel(5º)</li>
+            <li>Nicolás(3º)</li>
+            <li>Gabriela(2º)</li>
+            <li>Carlos Javier(1º)</li>
+            <li>Angélica(4º)</li>
+            <li>Lucía(3º)</li>
+            <li>Nazim(6º)</li>
+            <li>Mar(6º)</li>
+            <li>Alisson(2º)</li>
+            <li>Nicolás(1º)</li>
+            <li>Ismael(4º)</li>
+            <li>Jazbell(2º)</li>
+            <li>Saifan(3º)</li>15
+            <li>Cris(1º ESO)</li>
+            <li>Aaron(1º ESO)</li>
+            <li>Esteban(2º ESO)</li>
         </ul>
+        <p>Orden de las pruebas: 3, 4, 1, 2</p>
         </div>
         <div class = grupos5>
         <h2>Puntos Día 1</h2>

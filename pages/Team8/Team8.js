@@ -10,22 +10,26 @@ export const Team8= () => {
         <div class = grupos8>
         <h2>Equipos 8 - Víctor, Ángel/Alba</h2>
         <ul class = players>
-            <li>Analía(6)</li>
-            <li>Hans(6)</li>
-            <li>Gabriel(5)</li>
-            <li>Nicolás(3?)</li>
-            <li>Gabriela(2)</li>
-            <li>Carlos Javier(1)</li>
-            <li>Angélica(4)</li>
-            <li>Lucía(3)</li>
-            <li>Nazim(6)</li>
-            <li>Mar(6)</li>
-            <li>Alisson(2)</li>
-            <li>Nicolás(1)</li>
-            <li>Ismael(4)</li>
-            <li>Jazbell(2)</li>
-            <li>Saifan(3)</li>
+            <li>Luna(6º)</li>
+            <li>Lucía(5º)</li>
+            <li>Joshua(3º)</li>
+            <li>África(3º)</li>
+            <li>Wenzel(2º)</li>
+            <li>Nathan(1º)</li>
+            <li>Adriel(4º)</li>
+            <li>Zile(5º)</li>
+            <li>Izan(6º)</li>
+            <li>Guadalupe(2º)</li>
+            <li>Victoria(1º)</li>
+            <li>Lucía(4º)</li>
+            <li>Erick(4º)</li>
+            <li>Gustavo Adrián(6º)</li>
+            <li>Juan Pablo(4º)</li>15
+            <li>Johan(1º ESO)</li>
+            <li>Marco(2º ESO)</li>
+            <li>Alejandro E.(4º ESO)</li>
         </ul>
+        <p>Orden de las pruebas: 4, 1, 2, 3</p>
         </div>
         <div class = grupos8>
         <h2>Puntos Día 1</h2>

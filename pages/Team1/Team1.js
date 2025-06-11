@@ -10,20 +10,25 @@ export const Team1 = () => {
         <div class = grupos1>
         <h2>Equipos 1 - Laura y Ana</h2>
         <ul class = players>
-            <li>Aitana(6)</li>
-            <li>Miguel(5)</li>
-            <li>Thiago(2)</li>
-            <li>Ainhoa(1)</li>
-            <li>Eliané(1)</li>
-            <li>Justo(4)</li>
-            <li>Ainara(5)</li>
-            <li>Ana Lucía(6)</li>
-            <li>Carlota(2)</li>
-            <li>Nathaniel(1)</li>
-            <li>Valeria(4)</li>
-            <li>Alonzo(1)</li>
-            <li>Alex(3)</li>
+            <li>Aitana(6º)</li>
+            <li>Miguel(5º)</li>
+            <li>Thiago(2º)</li>
+            <li>Ainhoa(1º)</li>
+            <li>Eliané(1º)</li>
+            <li>Justo(4º)</li>
+            <li>Ainara(5º)</li>
+            <li>Ana Lucía(6º)</li>
+            <li>Carlota(2º)</li>
+            <li>Nathaniel(1º)</li>
+            <li>Valeria(4º)</li>
+            <li>Alonzo(1º)</li>
+            <li>Alex(3º)</li>
+            <li>Jeremy(1º ESO)</li>
+            <li>Eileen(1º ESO)</li>
+            <li>Facundo(2º ESO)</li>
+            <li>Alejandro(4º ESO)</li>17
         </ul>
+        <p>Orden de las pruebas: 1, 2, 3, 4</p>
         </div>
         <div class = grupos1>
         <h2>Puntos Día 1</h2>

@@ -10,22 +10,26 @@ export const Team6= () => {
         <div class = grupos6>
         <h2>Equipos 6 - Alberto y Raquel</h2>
         <ul class = players>
-            <li>David(6)</li>
-            <li>Valeria(5)</li>
-            <li>Almudena(3)</li>
-            <li>Daniela(3)</li>
-            <li>Óscar(2)</li>
-            <li>Carmen(1)</li>
-            <li>Cynthia(4)</li>
-            <li>Azahara(3)</li>
-            <li>Derek(6)</li>
-            <li>Emmanuel(2)</li>
-            <li>Yordi(1)</li>
-            <li>Moly(4)</li>
-            <li>Adrián(4)</li>
-            <li>Luci(2)</li>
-            <li>Hebrea(4)</li>
+            <li>David(6º)</li>
+            <li>Valeria(5º)</li>
+            <li>Almudena(3º)</li>
+            <li>Daniela(3º)</li>
+            <li>Óscar(2º)</li>
+            <li>Carmen(1º)</li>
+            <li>Cynthia(4º)</li>
+            <li>Azahara(3º)</li>
+            <li>Sofía(6º)</li>
+            <li>Emmanuel(2º)</li>
+            <li>Yordi(1º)</li>
+            <li>Moly(4º)</li>
+            <li>Adrián(4º)</li>
+            <li>Luci(2º)</li>
+            <li>Hebrea(4º)</li>15
+            <li>Justin(1º ESO)</li>
+            <li>Axel(2º ESO)</li>
+            <li>Jesús(4º ESO)</li>
         </ul>
+        <p>Orden de las pruebas: 3, 4, 1, 2</p>
         </div>
         <div class = grupos6>
         <h2>Puntos Día 1</h2>

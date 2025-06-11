@@ -11,21 +11,25 @@ export const Team2 = () => {
         <div class="grupos2">
             <h2>Equipos 2 - Miguel Ángel y Jorge</h2>
             <ul class="players">
-                <li>Fiorella(6)</li>
-                <li>Zichen(5)</li>
-                <li>Maykel(3)</li>
-                <li>Ismael(2)</li>
-                <li>Ángel Xu(2)</li>
-                <li>David(2)</li>
-                <li>Eva(4)</li>
-                <li>Martín(5)</li>
-                <li>Gabriela(6)</li>
-                <li>Alejandra(2)</li>
-                <li>Paolo(1)</li>
-                <li>Sanay(4)</li>
-                <li>Gabriela(1)</li>
-                <li>Martín(5)</li>
+                <li>Fiorella(6º)</li>
+                <li>Zichen(5º)</li>
+                <li>Maykel(3º)</li>
+                <li>Ismael(2º)</li>
+                <li>Ángel Xu(2º)</li>
+                <li>David(2º)</li>
+                <li>Eva(4º)</li>
+                <li>Martín(5º)</li>
+                <li>Gabriela(6º)</li>
+                <li>Alejandra(2º)</li>
+                <li>Paolo(1º)</li>
+                <li>Sanay(4º)</li>
+                <li>Gabriela(1º)</li>
+                <li>Martín(5º)</li>
+                <li>Ruby(1º ESO)</li>
+                <li>Xing Qiao(1º ESO)</li>
+                <li>Alejandro(3º ESO)</li>17
             </ul>
+            <p>Orden de las pruebas: 1, 2, 3, 4</p>
         </div>
         <div class="grupos2">
             <h2>Puntos Día 1</h2>
