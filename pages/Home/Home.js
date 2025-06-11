@@ -47,7 +47,7 @@ export const HomeGames = () => {
             </section>
             <section>
                 <h1>Juego 3</h1>
-                <p>PARACAÍDAS -- Todos los participantes se agarran alrededor del paracaídas y moviéndolo arriba y abajo intentan meter dentro del agujero del paracaídas la pelota. Pueden jugar 2 o 3 rondas cada equipo y el equipo que haya tardado menos conseguirá los 10 puntos. <span></span>Material: Paracaídas y 2 pelotas de gomaespuma.</p>
+                <p>PARACAÍDAS -- Todos los participantes se agarran alrededor del paracaídas y moviéndolo arriba y abajo intentan meter dentro del agujero del paracaídas la pelota. Pueden jugar 2 o 3 rondas cada equipo y el equipo que haya tardado menos conseguirá los 10 puntos. <span>Material: Paracaídas y 2 pelotas de gomaespuma.</span></p>
             </section>
             <section>
                 <h1>Juego 4</h1>
@@ -69,7 +69,7 @@ export const HomeGames = () => {
                 <h1>Juego 3</h1>
                 <p>PAÑUELOS -- Los alumnos se cuelgan un pañuelo por detrás y deben evitar que se los quiten e intentar coger los pañuelos de los demás del equipo contrario. Cuando te han quitado el pañuelo que llevas colgado, puedes ponerte otro de los que hayas obtenido y que lleves en la mano. Si no tienes pañuelo quedas eliminado. REGLAS: Debe estar visible, bastante sacado y no pueden impedir que se los quiten con las manos o tapándose o sentándose. OPCIONES: Gana 10 puntos el equipo que coja todos los del equipo rival. Comienza un equipo y se cronometra, después el otro y el equipo que tarde menos gana los 10 puntos. <span>Material: Pañuelos.</span></p>
             </section>
-            <section>
+            <section id= dia2juego4>
                 <h1>Juego 4</h1>
                 <p>CARRERA DE SACOS -- Carrera de sacos por relevos gana el grupo más rápido o se da un punto por cada pareja ganadora. <span>Material: Sacos.</span></p>
             </section>

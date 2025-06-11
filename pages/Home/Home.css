@@ -5,7 +5,7 @@
     justify-content: space-between;
     padding: 20px;
     gap: 45px;
-    font-weight: bold;
+ 
     text-align: center;
     filter: drop-shadow(10px 10px 10px rgb(0, 0, 0));
 }
@@ -20,8 +20,19 @@ article{
 
 section {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 5px;
     padding: 10px;
+}
+
+#dia2juego4 {
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px;
+}
+
+section > p > span {
+    font-weight: bold;
 }
 
 article, section {
