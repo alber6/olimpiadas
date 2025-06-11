@@ -16,14 +16,14 @@ export const HomeGames = () => {
     const main = document.querySelector("main");
     cleanPage(main);
     // se añade la variable scores con la funcion con un array del 1 al 4
-    const team1scores = getGameScores("Team1Game", 8);
-    const team2scores = getGameScores("Team2Game", 8);
-    const team3scores = getGameScores("Team3Game", 8);
-    const team4scores = getGameScores("Team4Game", 8);
-    const team5scores = getGameScores("Team5Game", 8);
-    const team6scores = getGameScores("Team6Game", 8);
-    const team7scores = getGameScores("Team7Game", 8);
-    const team8scores = getGameScores("Team8Game", 8);
+    const team1scores = getGameScores("Team1Game", 10);
+    const team2scores = getGameScores("Team2Game", 10);
+    const team3scores = getGameScores("Team3Game", 10);
+    const team4scores = getGameScores("Team4Game", 10);
+    const team5scores = getGameScores("Team5Game", 10);
+    const team6scores = getGameScores("Team6Game", 10);
+    const team7scores = getGameScores("Team7Game", 10);
+    const team8scores = getGameScores("Team8Game", 10);
     // uso del .reduce para sumar todos los valores del array scores. sum = 0, val= 1 y se suman, luego sum pasa a valer 1 y val es el siguiente numero del array, y se suma 1 con ese siguiente numero
     const team1Total = team1scores.reduce((acc, val) => acc + val, 0);
     const team2Total = team2scores.reduce((acc, val) => acc + val, 0);

@@ -8,7 +8,7 @@ export const Team6= () => {
    main.innerHTML = `
     <div id = container-puntos6>
         <div class = grupos6>
-        <h2>Equipos 6 - Alberto y Raquel --></h2>
+        <h2>Equipos 6 - Alberto y Raquel</h2>
         <ul class = players>
             <li>David(6)</li>
             <li>Valeria(5)</li>
@@ -73,9 +73,22 @@ export const Team6= () => {
             <p class="resultado" id="team6result8"></p>
             </div>
         </div>
+        <div class = grupos6>
+        <h2>Puntos JUEGOS EXTRA</h2>
+            <div>
+            <input type="number" id="team6num9" placeholder="Juego 1 EXTRA" required>
+            <button type="button" id="team6btn9" >Guardar</button>
+            <p class="resultado" id="team6result9"></p>
+            </div>
+            <div>
+            <input type="number" id="team6num10" placeholder="Juego 2 EXTRA" required>
+            <button type="button" id="team6btn10" >Guardar</button>
+            <p class="resultado" id="team6result10"></p>
+            </div>
+        </div>
     </div>
     `
-    const nums = [1, 2, 3, 4, 5, 6, 7, 8];
+    const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
     nums.forEach(num => {
         const input = document.getElementById(`team6num${num}`);
