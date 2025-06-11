@@ -8,23 +8,21 @@ export const Team1 = () => {
     main.innerHTML = `
     <div id = container-puntos1>
         <div class = grupos1>
-        <h2>Equipos 1 - Profesores --></h2>
+        <h2>Equipos 1 - Laura y Ana --></h2>
         <ul class = players>
-            <li>Jugador 1 </li>
-            <li>Jugador 2 </li>
-            <li>Jugador 3 </li>
-            <li>Jugador 4 </li>
-            <li>Jugador 5 </li>
-            <li>Jugador 6 </li>
-            <li>Jugador 7 </li>
-            <li>Jugador 8 </li>
-            <li>Jugador 9 </li>
-            <li>Jugador 10 </li>
-            <li>Jugador 11 </li>
-            <li>Jugador 12 </li>
-            <li>Jugador 13 </li>
-            <li>Jugador 14 </li>
-            <li>Jugador 15 </li>
+            <li>Aitana(6)</li>
+            <li>Miguel(5)</li>
+            <li>Thiago(2)</li>
+            <li>Ainhoa(1)</li>
+            <li>Eliané(1)</li>
+            <li>Justo(4)</li>
+            <li>Ainara(5)</li>
+            <li>Ana Lucía(6)</li>
+            <li>Carlota(2)</li>
+            <li>Nathaniel(1)</li>
+            <li>Valeria(4)</li>
+            <li>Alonzo(1)</li>
+            <li>Alex(3)</li>
         </ul>
         </div>
         <div class = grupos1>
