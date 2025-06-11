@@ -24,10 +24,10 @@ export const Team8= () => {
             <li>Lucía(4º)</li>
             <li>Erick(4º)</li>
             <li>Gustavo Adrián(6º)</li>
-            <li>Juan Pablo(4º)</li>15
+            <li>Juan Pablo(4º)</li>
             <li>Johan(1º ESO)</li>
             <li>Marco(2º ESO)</li>
-            <li>Alejandro E.(4º ESO)</li>
+            <li>Alejandro E.(4º ESO)</li>18
         </ul>
         <p>Orden de las pruebas: 4, 1, 2, 3</p>
         </div>

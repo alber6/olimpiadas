@@ -23,10 +23,10 @@ export const Team7= () => {
             <li>Alejandro(1)</li>
             <li>Jhadiel(4)</li>
             <li>Luciana(2)</li>
-            <li>Renato(4)</li>14
+            <li>Renato(4)</li>
             <li>Alan(1º ESO)</li>
             <li>Luis Ángel(1º ESO)</li>
-            <li>Daniel F.C(2º ESO)</li>
+            <li>Daniel F.C(2º ESO)</li>17
         </ul>
         <p>Orden de las pruebas: 4, 1, 2, 3</p>
         </div>

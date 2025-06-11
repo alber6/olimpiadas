@@ -24,10 +24,10 @@ export const Team4= () => {
             <li>Álvaro(4º)</li>
             <li>Nadia(4º)</li>
             <li>Lía(6º)</li>
-            <li>Abril(3º)</li>15
+            <li>Abril(3º)</li>
             <li>José Daniel(1º ESO)</li>
             <li>Carolayn(1º ESO)</li>
-            <li>Victoria(2º ESO)</li>
+            <li>Victoria(2º ESO)</li>18
         </ul>
         <p>Orden de las pruebas: 2, 3, 4, 1</p>
         </div>
