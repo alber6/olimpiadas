@@ -1,5 +1,6 @@
 import { cleanPage} from "../../utils/cleanPage/"
 import "./team7.css"
+import { db, setDoc, doc } from "../../firebase-config";
 
 export const Team7= () => {
     const main = document.querySelector("main");
@@ -91,24 +92,42 @@ export const Team7= () => {
         </div>
     </div>
     `
+      //array con los numeros de cada juego
     const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-    nums.forEach(num => {
-        const input = document.getElementById(`team7num${num}`);
-        const result = document.getElementById(`team7result${num}`);
-        const button = document.getElementById(`team7btn${num}`);
+nums.forEach(num => {
+    // referencia a los elementos input, botón y párrafo para mostrar resultado
+  const input = document.getElementById(`team7num${num}`);
+  const result = document.getElementById(`team7result${num}`);
+  const button = document.getElementById(`team7btn${num}`);
 
-        const saved = localStorage.getItem(`Team7Game${num}`);
-        input.value = saved || "";
-        result.textContent = `Resultado: ${saved || 0}`;
+  // al hacer click en el botón de cada uno
+  button.addEventListener("click", async () => {
+    // se lee el valor númerico del input o 0 si está vacío
+    const value = parseFloat(input.value) || 0;
 
-        button.addEventListener("click", () => {
-            const value = parseFloat(input.value) || 0;
-            localStorage.setItem(`Team7Game${num}`, value);
-            result.textContent = `Resultado: ${value}`;
-            input.value = "";
-        });
-    });
+    try {
+         // Se crea una referencia al documento con ID fijo para cada juego
+      const docId = `team7-juego${num}`;
+      const docRef = doc(db, "resultados", docId); // referencia al documento con ID fijo
+      // Guarda o actualiza los puntos en Firestore
+      await setDoc(docRef, {
+        equipo: "Team 7",
+        juego: `Juego ${num}`,
+        juegoNumero: num,
+        puntos: value,
+        dia: num <= 4 ? "Día 1" : num <= 8 ? "Día 2" : "Extra",
+        fecha: new Date()
+      });
+      // Muestra el resultado guardado y limpia el input
+      result.textContent = `Resultado: ${value}`;
+      input.value = "";
+    } catch (error) {
+      console.error("Error al guardar en Firebase:", error);
+      result.textContent = `Error al guardar`;
+    }
+  });
+});
 }
 
 

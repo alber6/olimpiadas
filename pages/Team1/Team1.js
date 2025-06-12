@@ -1,10 +1,15 @@
 import { cleanPage} from "../../utils/cleanPage/"
 import "./team1.css"
+import { db, setDoc, doc } from "../../firebase-config";
+
 
 export const Team1 = () => {
+    // selecciona el elemento main del html
     const main = document.querySelector("main");
+    // limpia el contenido anterior del main
     cleanPage(main);
 
+    // inserta el html con la lista de jugadores y inputs para puntos
     main.innerHTML = `
     <div id = container-puntos1>
         <div class = grupos1>
@@ -56,22 +61,22 @@ export const Team1 = () => {
         <div class = grupos1>
         <h2>Puntos Día 2</h2>
             <div>
-            <input type="number" id="team1num5" placeholder="Juego 1" required>
+            <input type="number" id="team1num5" placeholder="Juego 5" required>
             <button type="button" id="team1btn5" >Guardar</button>
             <p class="resultado" id="team1result5"></p>
             </div>
             <div>
-            <input type="number" id="team1num6" placeholder="Juego 2" required>
+            <input type="number" id="team1num6" placeholder="Juego 6" required>
             <button type="button" id="team1btn6" >Guardar</button>
             <p class="resultado" id="team1result6"></p>
             </div>
             <div>
-            <input type="number" id="team1num7" placeholder="Juego 3" required>
+            <input type="number" id="team1num7" placeholder="Juego 7" required>
             <button type="button" id="team1btn7" >Guardar</button>
             <p class="resultado" id="team1result7"></p>
             </div>
             <div>
-            <input type="number" id="team1num8" placeholder="Juego 4" required>
+            <input type="number" id="team1num8" placeholder="Juego 8" required>
             <button type="button" id="team1btn8" >Guardar</button>
             <p class="resultado" id="team1result8"></p>
             </div>
@@ -79,37 +84,53 @@ export const Team1 = () => {
         <div class = grupos1>
         <h2>Puntos JUEGOS EXTRA</h2>
             <div>
-            <input type="number" id="team1num9" placeholder="Juego 1 EXTRA" required>
+            <input type="number" id="team1num9" placeholder="Juego 9 EXTRA" required>
             <button type="button" id="team1btn9" >Guardar</button>
             <p class="resultado" id="team1result9"></p>
             </div>
             <div>
-            <input type="number" id="team1num10" placeholder="Juego 2 EXTRA" required>
+            <input type="number" id="team1num10" placeholder="Juego 10 EXTRA" required>
             <button type="button" id="team1btn10" >Guardar</button>
             <p class="resultado" id="team1result10"></p>
             </div>
         </div>
     </div>
     `
+    //array con los numeros de cada juego
     const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-    nums.forEach(num => {
-        const input = document.getElementById(`team1num${num}`);
-        const result = document.getElementById(`team1result${num}`);
-        const button = document.getElementById(`team1btn${num}`);
+nums.forEach(num => {
+    // referencia a los elementos input, botón y párrafo para mostrar resultado
+  const input = document.getElementById(`team1num${num}`);
+  const result = document.getElementById(`team1result${num}`);
+  const button = document.getElementById(`team1btn${num}`);
 
-        const saved = localStorage.getItem(`Team1Game${num}`);
-        input.value = saved || "";
-        result.textContent = `Resultado: ${saved || 0}`;
+  // al hacer click en el botón de cada uno
+  button.addEventListener("click", async () => {
+    // se lee el valor númerico del input o 0 si está vacío
+    const value = parseFloat(input.value) || 0;
 
-        button.addEventListener("click", () => {
-            const value = parseFloat(input.value) || 0;
-            localStorage.setItem(`Team1Game${num}`, value);
-            result.textContent = `Resultado: ${value}`;
-            input.value = "";
-        });
-    });
-}
+    try {
+         // Se crea una referencia al documento con ID fijo para cada juego
+      const docId = `team1-juego${num}`;
+      const docRef = doc(db, "resultados", docId); // referencia al documento con ID fijo
+      // Guarda o actualiza los puntos en Firestore
+      await setDoc(docRef, {
+        equipo: "Team 1",
+        juego: `Juego ${num}`,
+        juegoNumero: num,
+        puntos: value,
+        dia: num <= 4 ? "Día 1" : num <= 8 ? "Día 2" : "Extra",
+        fecha: new Date()
+      });
+      // Muestra el resultado guardado y limpia el input
+      result.textContent = `Resultado: ${value}`;
+      input.value = "";
+    } catch (error) {
+      console.error("Error al guardar en Firebase:", error);
+      result.textContent = `Error al guardar`;
+    }
+  });
+});
 
-
-
+};

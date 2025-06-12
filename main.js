@@ -11,6 +11,7 @@ import { Team6 } from "./pages/Team6/Team6";
 import { Team7 } from "./pages/Team7/Team7";
 import { Team8 } from "./pages/Team8/Team8";
 
+
 Navbar();
 HomeGames();
 

@@ -1,38 +1,53 @@
 import "./Home.css";
 import { cleanPage } from "../../utils/cleanPage";
+import { db } from "../../firebase-config.js";
+import { collection, query, where, getDocs } from "../../firebase-config.js";
 
-////se hace una funcion para acceder a las puntuaciones de cada juego que se encuentran guardadado en TEAM.JS
-function getGameScores(prefix, count) {
-    const scores = [];
-    for (let i = 1; i <= count; i++) {
-        //
-        const score = parseFloat(localStorage.getItem(`${prefix}${i}`)) || 0;
-        scores.push(score);
+export async function getGameScores(teamName) {
+    // crea un array con 10 ceros para almacenar puntos que se inicializan en 0
+  const scores = Array(10).fill(0); 
+  //Referencia a la colección "resultados" en Firestore
+  const colRef = collection(db, "resultados");
+  // Consulta para filtrar solo documentos donde el campo 'equipo' es igual a teamName
+  const q = query(colRef, where("equipo", "==", teamName));
+  // Ejecuta la consulta y obtiene los documentos que coinciden
+  const snapshot = await getDocs(q);
+
+    // Recorre cada documento de la consulta
+  snapshot.forEach(doc => {
+    const data = doc.data();
+    // Usa juegoNumero directamente para evitar parsing
+    const index = data.juegoNumero;
+    if (typeof index === "number" && index >= 1 && index <= 10) {
+      scores[index - 1] = data.puntos || 0;
     }
-    return scores;
+
+  });
+
+  return scores;
 }
 
-export const HomeGames = () => {
+export const HomeGames = async () => {
     const main = document.querySelector("main");
     cleanPage(main);
-    // se añade la variable scores con la funcion con un array del 1 al 4
-    const team1scores = getGameScores("Team1Game", 10);
-    const team2scores = getGameScores("Team2Game", 10);
-    const team3scores = getGameScores("Team3Game", 10);
-    const team4scores = getGameScores("Team4Game", 10);
-    const team5scores = getGameScores("Team5Game", 10);
-    const team6scores = getGameScores("Team6Game", 10);
-    const team7scores = getGameScores("Team7Game", 10);
-    const team8scores = getGameScores("Team8Game", 10);
-    // uso del .reduce para sumar todos los valores del array scores. sum = 0, val= 1 y se suman, luego sum pasa a valer 1 y val es el siguiente numero del array, y se suma 1 con ese siguiente numero
-    const team1Total = team1scores.reduce((acc, val) => acc + val, 0);
-    const team2Total = team2scores.reduce((acc, val) => acc + val, 0);
-    const team3Total = team3scores.reduce((acc, val) => acc + val, 0);
-    const team4Total = team4scores.reduce((acc, val) => acc + val, 0);
-    const team5Total = team5scores.reduce((acc, val) => acc + val, 0);
-    const team6Total = team6scores.reduce((acc, val) => acc + val, 0);
-    const team7Total = team7scores.reduce((acc, val) => acc + val, 0);
-    const team8Total = team8scores.reduce((acc, val) => acc + val, 0);
+
+    const teams = [];
+    for (let i = 1; i <= 8; i++) {
+        const teamId = `Team ${i}`;
+        const scores = await getGameScores(teamId);
+        const total = scores.reduce((acc, val) => acc + val, 0);
+        teams.push({ id: i, scores, total });
+            console.log(teams)
+    }
+
+    let teamHTML = teams.map(team => `
+        <section>
+            <h1>Equipo ${team.id}</h1>
+            <p>Juegos: ${team.scores.join(" - ")}</p>
+            <p>TOTAL: ${team.total} puntos</p>
+        </section>
+    `).join("");
+
     main.innerHTML = `
     <div class= gamedays>
         <article>
@@ -74,50 +89,10 @@ export const HomeGames = () => {
                 <p>CARRERA DE SACOS -- Carrera de sacos por relevos gana el grupo más rápido o se da un punto por cada pareja ganadora. <span>Material: Sacos.</span></p>
             </section>
         </article>
-         <article id = teamsPuntos>
-         <h2>PUNTUACIÓN FINAL</H2>
-            <section>
-                <h1>Equipo 1</h1>
-                <p>Juegos: ${team1scores.join(" - ")}</p>
-                <p>TOTAL: ${team1Total} puntos</p>
-            </section>
-            <section>
-                <h1>Equipo 2</h1>
-                <p>Juegos: ${team2scores.join(" - ")}</p>
-                <p>TOTAL: ${team2Total} puntos</p>
-            </section>
-            <section>
-                <h1>Equipo 3</h1>
-                <p>Juegos: ${team3scores.join(" - ")}</p>
-                <p>TOTAL: ${team3Total} puntos</p>
-            </section>
-            <section>
-                <h1>Equipo 4</h1>
-                 <p>Juegos: ${team4scores.join(" - ")}</p>
-                <p>TOTAL: ${team4Total} puntos</p>
-            </section>
-            <section>
-                <h1>Equipo 5</h1>
-                 <p>Juegos: ${team5scores.join(" - ")}</p>
-                <p>TOTAL: ${team5Total} puntos</p>
-            </section>
-            <section>
-                <h1>Equipo 6</h1>
-                 <p>Juegos: ${team6scores.join(" - ")}</p>
-                <p>TOTAL: ${team6Total} puntos</p>
-            </section>
-            <section>
-                <h1>Equipo 7</h1>
-                 <p>Juegos: ${team7scores.join(" - ")}</p>
-                <p>TOTAL: ${team7Total} puntos</p>
-            </section>
-            <section>
-                <h1>Equipo 8</h1>
-                 <p>Juegos: ${team8scores.join(" - ")}</p>
-                <p>TOTAL: ${team8Total} puntos</p>
-            </section>
-        </article>
+       <article id="teamsPuntos">
+        <h2>PUNTUACIÓN FINAL</h2>
+            ${teamHTML}
+    </article>
     </div>
     `
-    
 }
