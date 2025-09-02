@@ -15,23 +15,16 @@ export const Team1 = () => {
         <div class = grupos1>
         <h2>Equipos 1 - Laura y Ana</h2>
         <ul class = players>
-            <li>Aitana(6º)</li>
-            <li>Miguel(5º)</li>
-            <li>Thiago(2º)</li>
-            <li>Ainhoa(1º)</li>
-            <li>Eliané(1º)</li>
-            <li>Justo(4º)</li>
-            <li>Ainara(5º)</li>
-            <li>Ana Lucía(6º)</li>
-            <li>Carlota(2º)</li>
-            <li>Nathaniel(1º)</li>
-            <li>Valeria(4º)</li>
-            <li>Alonzo(1º)</li>
-            <li>Alex(3º)</li>
-            <li>Jeremy(1º ESO)</li>
-            <li>Eileen(1º ESO)</li>
-            <li>Facundo(2º ESO)</li>
-            <li>Alejandro(4º ESO)</li>17
+            <li>Jugador1</li>
+            <li>Jugador2</li>
+            <li>Jugador3</li>
+            <li>Jugador4</li>
+            <li>Jugador5</li>
+            <li>Jugador6</li>
+            <li>Jugador7</li>
+            <li>Jugador8</li>
+            <li>Jugador9</li>
+            <li>Jugador10</li>
         </ul>
         <p>Orden de las pruebas: 1, 2, 3, 4</p>
         </div>
@@ -61,22 +54,22 @@ export const Team1 = () => {
         <div class = grupos1>
         <h2>Puntos Día 2</h2>
             <div>
-            <input type="number" id="team1num5" placeholder="Juego 5" required>
+            <input type="number" id="team1num5" placeholder="Juego 1" required>
             <button type="button" id="team1btn5" >Guardar</button>
             <p class="resultado" id="team1result5"></p>
             </div>
             <div>
-            <input type="number" id="team1num6" placeholder="Juego 6" required>
+            <input type="number" id="team1num6" placeholder="Juego 2" required>
             <button type="button" id="team1btn6" >Guardar</button>
             <p class="resultado" id="team1result6"></p>
             </div>
             <div>
-            <input type="number" id="team1num7" placeholder="Juego 7" required>
+            <input type="number" id="team1num7" placeholder="Juego 3" required>
             <button type="button" id="team1btn7" >Guardar</button>
             <p class="resultado" id="team1result7"></p>
             </div>
             <div>
-            <input type="number" id="team1num8" placeholder="Juego 8" required>
+            <input type="number" id="team1num8" placeholder="Juego 4" required>
             <button type="button" id="team1btn8" >Guardar</button>
             <p class="resultado" id="team1result8"></p>
             </div>
@@ -84,12 +77,12 @@ export const Team1 = () => {
         <div class = grupos1>
         <h2>Puntos JUEGOS EXTRA</h2>
             <div>
-            <input type="number" id="team1num9" placeholder="Juego 9 EXTRA" required>
+            <input type="number" id="team1num9" placeholder="Juego 1 EXTRA" required>
             <button type="button" id="team1btn9" >Guardar</button>
             <p class="resultado" id="team1result9"></p>
             </div>
             <div>
-            <input type="number" id="team1num10" placeholder="Juego 10 EXTRA" required>
+            <input type="number" id="team1num10" placeholder="Juego 2 EXTRA" required>
             <button type="button" id="team1btn10" >Guardar</button>
             <p class="resultado" id="team1result10"></p>
             </div>
@@ -114,6 +107,9 @@ nums.forEach(num => {
          // Se crea una referencia al documento con ID fijo para cada juego
       const docId = `team1-juego${num}`;
       const docRef = doc(db, "resultados", docId); // referencia al documento con ID fijo
+
+      // console.log("Intentando guardar:", docId, value); // 🔥 AÑADIR ESTO
+
       // Guarda o actualiza los puntos en Firestore
       await setDoc(docRef, {
         equipo: "Team 1",
@@ -123,10 +119,20 @@ nums.forEach(num => {
         dia: num <= 4 ? "Día 1" : num <= 8 ? "Día 2" : "Extra",
         fecha: new Date()
       });
+
+      // console.log("Guardado exitoso"); // 🔥 AÑADIR ESTO
+
       // Muestra el resultado guardado y limpia el input
       result.textContent = `Resultado: ${value}`;
       input.value = "";
     } catch (error) {
+
+    // console.error("Error completo:", error); // 🔥 CAMBIAR ESTO
+    // console.error("Código de error:", error.code); // 🔥 AÑADIR ESTO
+    // console.error("Mensaje:", error.message); // 🔥 AÑADIR ESTO
+    // result.textContent = `Error: ${error.message}`; // 🔥 CAMBIAR ESTO
+
+
       console.error("Error al guardar en Firebase:", error);
       result.textContent = `Error al guardar`;
     }

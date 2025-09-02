@@ -11,24 +11,16 @@ export const Team3= () => {
         <div class = grupos3>
         <h2>Equipos 3 - Luis y Julián</h2>
         <ul class = players>
-            <li>Derek(6º)</li>
-            <li>Cris Alexander(5º)</li>
-            <li>Safía(3º)</li>
-            <li>Valentina(2º)</li>
-            <li>Sonia(2º)</li>
-            <li>Antonella(1º)</li>
-            <li>Daniel(4º)</li>
-            <li>Alma(5º)</li>
-            <li>Álvaro(6º)</li>
-            <li>Ihan(2º)</li>
-            <li>Elena(1º)</li>
-            <li>Yuri(4º)</li>
-            <li>Carlos Wil(4º)</li>
-            <li>Armony(6º)</li>
-            <li>Emily(2º)</li>
-            <li>Daniel S.(1º ESO)</li>
-            <li>Hugo(1º ESO)</li>
-            <li>Juan Camilo(2º ESO)</li>18
+            <li>Jugador1</li>
+            <li>Jugador2</li>
+            <li>Jugador3</li>
+            <li>Jugador4</li>
+            <li>Jugador5</li>
+            <li>Jugador6</li>
+            <li>Jugador7</li>
+            <li>Jugador8</li>
+            <li>Jugador9</li>
+            <li>Jugador10</li>
         </ul>
         <p>Orden de las pruebas: 2, 3, 4, 1</p>
         </div>

@@ -11,23 +11,16 @@ export const Team7= () => {
         <div class = grupos7>
         <h2>Equipos 7 - Esther y María</h2>
         <ul class = players>
-            <li>Weiming(6)</li>
-            <li>Alejo(5)</li>
-            <li>Fran(5)</li>
-            <li>Bohan(4)</li>
-            <li>Saúl(2)</li>
-            <li>Camila(4)</li>
-            <li>Wesley(3)</li>
-            <li>Kaylie(6)</li>
-            <li>Óliver(2)</li>
-            <li>Neizan(2)</li>
-            <li>Alejandro(1)</li>
-            <li>Jhadiel(4)</li>
-            <li>Luciana(2)</li>
-            <li>Renato(4)</li>
-            <li>Alan(1º ESO)</li>
-            <li>Luis Ángel(1º ESO)</li>
-            <li>Daniel F.C(2º ESO)</li>17
+            <li>Jugador1</li>
+            <li>Jugador2</li>
+            <li>Jugador3</li>
+            <li>Jugador4</li>
+            <li>Jugador5</li>
+            <li>Jugador6</li>
+            <li>Jugador7</li>
+            <li>Jugador8</li>
+            <li>Jugador9</li>
+            <li>Jugador10</li>
         </ul>
         <p>Orden de las pruebas: 4, 1, 2, 3</p>
         </div>
@@ -109,7 +102,9 @@ nums.forEach(num => {
     try {
          // Se crea una referencia al documento con ID fijo para cada juego
       const docId = `team7-juego${num}`;
+    
       const docRef = doc(db, "resultados", docId); // referencia al documento con ID fijo
+      console.log(docRef);
       // Guarda o actualiza los puntos en Firestore
       await setDoc(docRef, {
         equipo: "Team 7",
@@ -118,6 +113,7 @@ nums.forEach(num => {
         puntos: value,
         dia: num <= 4 ? "Día 1" : num <= 8 ? "Día 2" : "Extra",
         fecha: new Date()
+        
       });
       // Muestra el resultado guardado y limpia el input
       result.textContent = `Resultado: ${value}`;
