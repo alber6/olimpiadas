@@ -2,108 +2,323 @@ import "./Home.css";
 import { cleanPage } from "../../utils/cleanPage";
 import { db } from "../../firebase-config.js";
 import { collection, query, where, getDocs } from "../../firebase-config.js";
+import { Team } from "../Team/Team";
 
+// Fetch scores for a specific team from Firestore
 export async function getGameScores(teamName) {
-    // crea un array con 10 ceros para almacenar puntos que se inicializan en 0
   const scores = Array(10).fill(0); 
-  //Referencia a la colección "resultados" en Firestore
   const colRef = collection(db, "resultados");
-  // Consulta para filtrar solo documentos donde el campo 'equipo' es igual a teamName
   const q = query(colRef, where("equipo", "==", teamName));
-  // Ejecuta la consulta y obtiene los documentos que coinciden
-  const snapshot = await getDocs(q);
-
-    // Recorre cada documento de la consulta
-  snapshot.forEach(doc => {
-    const data = doc.data();
-    // Usa juegoNumero directamente para evitar parsing
-    const index = data.juegoNumero;
-    if (typeof index === "number" && index >= 1 && index <= 10) {
-      scores[index - 1] = data.puntos || 0;
-    }
-
-  });
-
+  
+  try {
+    const snapshot = await getDocs(q);
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const index = data.juegoNumero;
+      if (typeof index === "number" && index >= 1 && index <= 10) {
+        scores[index - 1] = data.puntos || 0;
+      }
+    });
+  } catch (error) {
+    console.error(`Error al obtener puntuación para ${teamName}:`, error);
+  }
   return scores;
 }
 
 export const HomeGames = async () => {
-    const main = document.querySelector("main");
-    cleanPage(main);
+  const main = document.querySelector("main");
+  cleanPage(main);
 
-    const teams = [];
-    for (let i = 1; i <= 8; i++) {
-        const teamId = `Team ${i}`;
-        const scores = await getGameScores(teamId);
+  // Loading state
+  main.innerHTML = `
+    <div class="home-loading-container">
+      <div class="loading-spinner"></div>
+      <p>Cargando Clasificación en Tiempo Real...</p>
+    </div>
+  `;
+
+  // Fetch all team scores in parallel
+  const teams = [];
+  try {
+    const fetchPromises = Array.from({ length: 8 }, (_, i) => {
+      const teamId = i + 1;
+      return getGameScores(`Team ${teamId}`).then(scores => {
         const total = scores.reduce((acc, val) => acc + val, 0);
-        teams.push({ id: i, scores, total });
-            console.log(teams)
+        const completed = scores.filter(s => s > 0).length;
+        teams.push({ id: teamId, scores, total, completed });
+      });
+    });
+    
+    await Promise.all(fetchPromises);
+  } catch (error) {
+    console.error("Error al cargar la información de los equipos:", error);
+  }
+
+  // Sort teams by total points descending
+  teams.sort((a, b) => b.total - a.total);
+
+  // Render leaderboard rows
+  const leaderboardHTML = teams.map((team, index) => {
+    let medal = "";
+    let rankClass = "";
+    if (index === 0) {
+      medal = "🥇";
+      rankClass = "rank-1";
+    } else if (index === 1) {
+      medal = "🥈";
+      rankClass = "rank-2";
+    } else if (index === 2) {
+      medal = "🥉";
+      rankClass = "rank-3";
+    } else {
+      medal = `<span class="rank-number">${index + 1}</span>`;
     }
 
-    let teamHTML = teams.map(team => `
-        <section>
-            <h1>Equipo ${team.id}</h1>
-            <p>Juegos: ${team.scores.join(" - ")}</p>
-            <p>TOTAL: ${team.total} puntos</p>
-        </section>
+    // Calculate progress percentage based on highest score or max theoretical score
+    const maxScore = Math.max(...teams.map(t => t.total), 1);
+    const progressPercent = Math.min(100, Math.round((team.total / maxScore) * 100));
+
+    // Compile compact score badges
+    const scoreBadges = team.scores.map((score, sIndex) => `
+      <span class="score-badge-mini ${score > 0 ? 'active' : ''}" title="Juego ${sIndex + 1}: ${score} pts">
+        ${score}
+      </span>
     `).join("");
 
-    main.innerHTML = `
-    <div class= gamedays>
-        <article>
-            <section>
-                <p>REGLAS: ---> Cada juego durará apróximadamente 15 minutos. </p>
-                <p>MATERIAL ---> 8 aros, pelotas de tenis, un testigo para los relevos, conos, dos cubos, pelotas blandas, pañuelos, vasos y pajitas. (globos de agua)</p>
-            </section>
-        <h2>Dia 1 -Lunes 15</h2>
-            <section>
-                <h1>Juego 1</h1>
-                <img src="/public/images/aros.webp"/>
-                <p>PUNTERÍA CON LA MANO -- Lanzamientos con pelotas hacia aros que se encuentran en diferentes distancias. Cada alumno irá lanzando por turnos. <span>Suma de puntos; posición cercana vale 1 punto, posición media vale 2 puntos y posición lejana vale 3 puntos).</span></p>
-            </section>
-            <section>
-                <h1>Juego 2</h1>
-                <img src="/public/images/relevos.webp" />
-                <p>RELEVOS -- Carrera clásica llegando hasta un punto determinado y volver pasando el testigo hasta que lo realice todo el grupo. (Recomendación: colocar al alumnado por niveles). <span>El grupo que gane conseguirá 5 puntos. Se realizará 3 veces. </span></p>
-            </section>
-            <section>
-                <h1>Juego 3</h1>
-                <img src="/public/images/cubo.webp" />
-                <p>BALONCESTO CON CUBOS -- Cada grupo estará dividido en parejas. Uno de la pareja tendrá un cubo y el otro tendrá una pelota. Habrá 3 distancias, cerca(1), media(2) y lejana(3). La persona que tenga la pelota tendrá que decir a que distancia querrá tirar la pelota. Si dice distancia cerca(1), la persona del cubo tendrá que ponerse en esa distancia y esperar a que tire la pelota estando de espaldas<span>Suma de puntos; posición cercana vale 1 punto, posición media vale 2 puntos y posición lejana vale 3 puntos).</span></p>
-            </section>
-            <section>
-                <h1>Juego 4</h1>
-                <img src="/public/images/piesJuntos.webp" />
-                <p>SALTOS -- Salto de longitud a pies juntos. El primero del grupo salta con los pies juntos, salta y se queda parado para que el siguiente se ponga a su lado y salte con los pies juntos, y así sucesivamente hasta que lo haga todo el grupo. <span>El equipo que consiga una distancia más larga, gana 5 puntos. Se realizará 3 veces. </span></p>
-            </section>
-        </article>
-        <article>
-        <h2>Dia 2 - Martes 16</h2>
-            <section>
-                <h1>Juego 1</h1>
-                <img src="/public/images/pasaAro.webp" />
-                <p>PASA AROS -- El grupo tiene que estar unido sin romperse, es decir, todos tienen que estar dándose la mano con el objetivo que el aro pase por todas las personas del grupo sin romper la cadena y sin soltarse las manos.<span> 5 puntos para el ganador y se realiza 3 veces.</span></p>
-            </section>
-            <section>
-                <h1>Juego 2</h1>
-                <img src="/public/images/pajita.webp" />
-                <p>VASO PAJITA --  Todo el grupo tendrá una pajita en la boca y tendrán que pasarse un vaso que se encuentra boca abajo. El objetivo es pasar el vaso con la pajita sin tocarlo con las manos y que pase por todo el grupo.<span>10 puntos si el vaso pasa por todo el grupo, si llega por la mitad 5 puntos.</span></p>
-            </section>
-            <section>
-                <h1>Juego 3</h1>
-                <img src="/public/images/pañuelos.webp" />
-                <p>PAÑUELOS -- Los alumnos se cuelgan un pañuelo por detrás y deben evitar que se los quiten e intentar coger los pañuelos de los demás del equipo contrario. Cuando te han quitado el pañuelo que llevas colgado, puedes ponerte otro de los que hayas obtenido y que lleves en la mano. Si no tienes pañuelo quedas eliminado. REGLAS: Debe estar visible, bastante sacado y no pueden impedir que se los quiten con las manos o tapándose o sentándose. OPCIONES: <span>Gana 5 puntos el equipo que coja todos los del equipo rival. 3 partidas</span></p>
-            </section>
-            <section id= dia2juego4>
-                <h1>Juego 4</h1>
-                <img src="/public/images/robaBalones.webp" />
-                <p>ROBA PELOTAS --  Un grupo contra otro. Cada grupo tendrá un aro y dentro habrá varias pelotas de tenis. El juego consiste en llevar las pelotas dentro del aro del otro equipo sin que se salga del aro. No se puede llevar varias pelotas a la vez, solo una. <span>Se realizará 3 partidas y cada victoria ganarán 5 puntos.</span></p>
-            </section>
-        </article>
-       <article id="teamsPuntos">
-        <h2>PUNTUACIÓN FINAL</h2>
-            ${teamHTML}
-    </article>
+    return `
+      <div class="leaderboard-row ${rankClass}" data-team-id="${team.id}">
+        <div class="rank-col">${medal}</div>
+        <div class="team-col">
+          <span class="team-name">Equipo ${team.id}</span>
+          <span class="team-details">Juegos con puntos: ${team.completed}/10</span>
+        </div>
+        <div class="progress-col">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width: ${progressPercent}%"></div>
+          </div>
+          <div class="mini-scores-container">${scoreBadges}</div>
+        </div>
+        <div class="points-col">
+          <span class="points-value">${team.total}</span>
+          <span class="points-label">pts</span>
+        </div>
+        <div class="action-col">
+          <button class="btn-edit-scores" data-team-id="${team.id}">Cargar</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  main.innerHTML = `
+    <div class="home-container">
+      <!-- Welcome Hero -->
+      <section class="hero-section">
+        <div class="hero-content">
+          <h2>Olimpiadas Liceo Ibérico 2026</h2>
+          <p>Plataforma oficial de seguimiento y clasificación en tiempo real.</p>
+        </div>
+        <div class="rules-card">
+          <div class="rules-header">
+            <h3>📋 Reglamento General</h3>
+          </div>
+          <div class="rules-body">
+            <div class="rule-item">
+              <span class="rule-icon">⏳</span>
+              <p>Cada juego durará aproximadamente <strong>15 minutos</strong>.</p>
+            </div>
+            <div class="rule-item">
+              <span class="rule-icon">🛠️</span>
+              <p><strong>Materiales:</strong> 8 aros, pelotas de tenis, testigo para relevos, conos, 2 cubos, pelotas blandas, pañuelos, vasos, pajitas y globos de agua.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Dashboard Layout -->
+      <div class="dashboard-grid">
+        <!-- Left Column: Leaderboard -->
+        <section class="leaderboard-section">
+          <div class="section-header">
+            <h3>🏆 Tabla de Clasificación</h3>
+            <span class="live-indicator"><span class="pulse-dot"></span> EN VIVO</span>
+          </div>
+          <div class="leaderboard-container">
+            ${leaderboardHTML}
+          </div>
+        </section>
+
+        <!-- Right Column: Games Schedule -->
+        <section class="schedule-section">
+          <div class="section-header">
+            <h3>📅 Cronograma de Actividades</h3>
+            <div class="schedule-tabs">
+              <button class="sch-tab-btn active" data-day="day1">Día 1 - Lunes 15</button>
+              <button class="sch-tab-btn" data-day="day2">Día 2 - Martes 16</button>
+            </div>
+          </div>
+
+          <div class="schedule-panes">
+            <!-- Day 1 Schedule -->
+            <div class="sch-pane active" id="sch-pane-day1">
+              <div class="schedule-grid">
+                <div class="game-item-card">
+                  <div class="game-img-wrapper">
+                    <img src="/images/aros.webp" alt="Puntería" onerror="this.src='https://placehold.co/300x150/111827/FFFFFF?text=Puntería'">
+                  </div>
+                  <div class="game-info">
+                    <span class="game-number-badge">Juego 1</span>
+                    <h4>Puntería con la mano</h4>
+                    <p>Lanzamientos con pelotas hacia aros colocados a diferentes distancias. Cada alumno lanza por turnos.</p>
+                    <div class="game-scoring-rule">
+                      <strong>Puntos:</strong> Cerca (1 pto), Media (2 ptos), Lejos (3 ptos).
+                    </div>
+                  </div>
+                </div>
+
+                <div class="game-item-card">
+                  <div class="game-img-wrapper">
+                    <img src="/images/relevos.webp" alt="Relevos" onerror="this.src='https://placehold.co/300x150/111827/FFFFFF?text=Relevos'">
+                  </div>
+                  <div class="game-info">
+                    <span class="game-number-badge">Juego 2</span>
+                    <h4>Carrera de Relevos</h4>
+                    <p>Carrera de velocidad hasta un punto y vuelta pasando el testigo. Ordenados por niveles académicos.</p>
+                    <div class="game-scoring-rule">
+                      <strong>Puntos:</strong> 5 ptos para el ganador. Se realiza 3 veces.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="game-item-card">
+                  <div class="game-img-wrapper">
+                    <img src="/images/cubo.webp" alt="Baloncesto cubos" onerror="this.src='https://placehold.co/300x150/111827/FFFFFF?text=Cubos'">
+                  </div>
+                  <div class="game-info">
+                    <span class="game-number-badge">Juego 3</span>
+                    <h4>Baloncesto con cubos</h4>
+                    <p>Por parejas: uno con cubo en la cabeza y espaldas, otro lanza pelotas indicando distancia antes de tirar.</p>
+                    <div class="game-scoring-rule">
+                      <strong>Puntos:</strong> Cerca (1 pto), Media (2 ptos), Lejos (3 ptos).
+                    </div>
+                  </div>
+                </div>
+
+                <div class="game-item-card">
+                  <div class="game-img-wrapper">
+                    <img src="/images/piesJuntos.webp" alt="Saltos" onerror="this.src='https://placehold.co/300x150/111827/FFFFFF?text=Saltos'">
+                  </div>
+                  <div class="game-info">
+                    <span class="game-number-badge">Juego 4</span>
+                    <h4>Salto de longitud</h4>
+                    <p>Salto a pies juntos sucesivo. Cada uno salta desde la posición de caída del compañero.</p>
+                    <div class="game-scoring-rule">
+                      <strong>Puntos:</strong> Mayor distancia total gana 5 ptos. 3 rondas.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Day 2 Schedule -->
+            <div class="sch-pane" id="sch-pane-day2">
+              <div class="schedule-grid">
+                <div class="game-item-card">
+                  <div class="game-img-wrapper">
+                    <img src="/images/pasaAro.webp" alt="Pasa Aros" onerror="this.src='https://placehold.co/300x150/111827/FFFFFF?text=Aros'">
+                  </div>
+                  <div class="game-info">
+                    <span class="game-number-badge">Juego 5</span>
+                    <h4>El Pasa Aros</h4>
+                    <p>Pasar un aro por todo el grupo sin romper la cadena de manos dadas. Trabajo en equipo coordinado.</p>
+                    <div class="game-scoring-rule">
+                      <strong>Puntos:</strong> 5 ptos para el ganador. Se realiza 3 veces.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="game-item-card">
+                  <div class="game-img-wrapper">
+                    <img src="/images/pajita.webp" alt="Vaso pajita" onerror="this.src='https://placehold.co/300x150/111827/FFFFFF?text=Pajita'">
+                  </div>
+                  <div class="game-info">
+                    <span class="game-number-badge">Juego 6</span>
+                    <h4>El vaso y la pajita</h4>
+                    <p>Pasar un vaso de plástico boca abajo usando solo pajitas en la boca. Queda prohibido el uso de manos.</p>
+                    <div class="game-scoring-rule">
+                      <strong>Puntos:</strong> 10 ptos si recorre el grupo completo, 5 ptos si llega a la mitad.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="game-item-card">
+                  <div class="game-img-wrapper">
+                    <img src="/images/pañuelos.webp" alt="Pañuelos" onerror="this.src='https://placehold.co/300x150/111827/FFFFFF?text=Pañuelos'">
+                  </div>
+                  <div class="game-info">
+                    <span class="game-number-badge">Juego 7</span>
+                    <h4>Roba pañuelos</h4>
+                    <p>Evitar que te arrebaten el pañuelo colgado atrás e intentar coger el de tus rivales del otro equipo.</p>
+                    <div class="game-scoring-rule">
+                      <strong>Puntos:</strong> Gana 5 ptos el equipo que capture todos. 3 rondas.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="game-item-card">
+                  <div class="game-img-wrapper">
+                    <img src="/images/robaBalones.webp" alt="Roba Pelotas" onerror="this.src='https://placehold.co/300x150/111827/FFFFFF?text=Pelotas'">
+                  </div>
+                  <div class="game-info">
+                    <span class="game-number-badge">Juego 8</span>
+                    <h4>Roba Pelotas</h4>
+                    <p>Llevar pelotas de tenis una a una desde el aro inicial hasta el aro del equipo contrario sin que se salgan.</p>
+                    <div class="game-scoring-rule">
+                      <strong>Puntos:</strong> 3 rondas. Cada victoria otorga 5 puntos.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
-    `
-}
+  `;
+
+  // Wire up schedule tabs
+  const schTabs = main.querySelectorAll(".sch-tab-btn");
+  const schPanes = main.querySelectorAll(".sch-pane");
+  schTabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      schTabs.forEach(t => t.classList.remove("active"));
+      schPanes.forEach(p => p.classList.remove("active"));
+      
+      tab.classList.add("active");
+      const activePane = main.querySelector(`#sch-pane-${tab.dataset.day}`);
+      if (activePane) activePane.classList.add("active");
+    });
+  });
+
+  // Wire up click handlers on Leaderboard rows & edit buttons to open Team page
+  const leaderboardRows = main.querySelectorAll(".leaderboard-row");
+  leaderboardRows.forEach(row => {
+    const teamId = row.dataset.teamId;
+    
+    // Clicking anywhere on the row (except buttons that have their own listeners, though we handle both)
+    row.addEventListener("click", (e) => {
+      // Don't double trigger if clicking button
+      if (e.target.tagName !== "BUTTON") {
+        Team(teamId);
+      }
+    });
+  });
+
+  const editBtns = main.querySelectorAll(".btn-edit-scores");
+  editBtns.forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation(); // Stop row click propagation
+      const teamId = btn.dataset.teamId;
+      Team(teamId);
+    });
+  });
+};
