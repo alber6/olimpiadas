@@ -2,8 +2,12 @@ import { cleanPage } from "../../utils/cleanPage";
 import { db, setDoc, doc, collection, query, where, getDocs } from "../../firebase-config";
 import "./team.css";
 
-// Mappings of trial order for each team
-const TRIAL_ORDERS = {
+/**
+ * CONFIGURACIÓN DE ORDEN DE PRUEBAS PARA CADA EQUIPO
+ */
+
+// Orden de pruebas para el Día 1 (Juegos del 1 al 4)
+const TRIAL_ORDERS_DAY1 = {
   1: [1, 2, 4, 3],
   2: [1, 3, 2, 4],
   3: [2, 1, 3, 4],
@@ -14,7 +18,19 @@ const TRIAL_ORDERS = {
   8: [4, 3, 1, 2]
 };
 
-// Game details map for inline display
+// Orden de pruebas para el Día 2 (Juegos del 5 al 8)
+const TRIAL_ORDERS_DAY2 = {
+  1: [5, 6, 8, 7],
+  2: [5, 7, 6, 8],
+  3: [6, 5, 7, 8],
+  4: [6, 8, 5, 7],
+  5: [7, 5, 8, 6],
+  6: [7, 8, 6, 5],
+  7: [8, 6, 7, 5],
+  8: [8, 7, 5, 6]
+};
+
+// Mapa detallado con los nombres e información rápida de cada juego
 const GAME_DETAILS = {
   1: { name: "Puntería con la mano", desc: "Lanzamientos con pelotas hacia aros a diferentes distancias. 1 pto (cerca), 2 ptos (media), 3 ptos (lejos)." },
   2: { name: "Relevos", desc: "Carrera clásica pasando el testigo. Realizado 3 veces. El ganador de cada ronda consigue 5 puntos." },
@@ -28,7 +44,11 @@ const GAME_DETAILS = {
   10: { name: "Juego Extra 2", desc: "Juego de puntuación adicional según las directrices de los organizadores." }
 };
 
-// Toast notification helper
+/**
+ * Muestra una alerta flotante temporal en la pantalla (Toast Notification)
+ * @param {string} message - Mensaje a mostrar
+ * @param {string} type - Tipo de notificación ('success' para éxito, 'error' para errores)
+ */
 function showToast(message, type = "success") {
   let container = document.querySelector(".toast-container");
   if (!container) {
@@ -45,18 +65,47 @@ function showToast(message, type = "success") {
   
   container.appendChild(toast);
   
+  // Animación de salida inversa y posterior eliminación del DOM
   setTimeout(() => {
     toast.style.animation = "slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) reverse forwards";
     setTimeout(() => toast.remove(), 300);
   }, 3000);
 }
 
-// Main component function
+/**
+ * Renderiza los pasos/cards de la línea de tiempo superior
+ * @param {number} dayNum - Día de actividades (1 para Día 1, 2 para Día 2, 3 para Juegos Extra)
+ * @param {number} teamId - ID numérico del equipo (1-8)
+ * @returns {string} Código HTML con los pasos
+ */
+function renderTimelineSteps(dayNum, teamId) {
+  let order = [];
+  if (dayNum === 1) {
+    order = TRIAL_ORDERS_DAY1[teamId] || [1, 2, 3, 4];
+  } else if (dayNum === 2) {
+    order = TRIAL_ORDERS_DAY2[teamId] || [5, 6, 7, 8];
+  } else {
+    order = [9, 10]; // Juegos Extra
+  }
+
+  return order.map((gameNum, index) => `
+    <div class="step-card">
+      <div class="step-badge">${index + 1}º</div>
+      <div class="step-title">Juego ${gameNum}</div>
+      <div class="step-name">${GAME_DETAILS[gameNum].name}</div>
+    </div>
+  `).join("");
+}
+
+/**
+ * Componente principal para el Panel del Equipo
+ * @param {number} teamId - ID del equipo (1-8)
+ */
 export const Team = async (teamId) => {
   const main = document.querySelector("main");
   cleanPage(main);
 
-  // Set page loading state
+  // Estado de carga inicial
   main.innerHTML = `
     <div class="team-loading-container">
       <div class="loading-spinner"></div>
@@ -64,8 +113,9 @@ export const Team = async (teamId) => {
     </div>
   `;
 
-  // Fetch current scores from Firestore
+  // Inicialización del array local de puntos (10 juegos, por defecto null si no se han cargado)
   const scores = Array(10).fill(null);
+  
   try {
     const colRef = collection(db, "resultados");
     const q = query(colRef, where("equipo", "==", `Team ${teamId}`));
@@ -83,23 +133,14 @@ export const Team = async (teamId) => {
     showToast("Error al pre-cargar las puntuaciones", "error");
   }
 
-  // Calculate total score
+  // Cálculos iniciales para el resumen de estadísticas
   const totalPoints = scores.reduce((acc, val) => acc + (val || 0), 0);
   const completedGames = scores.filter(v => v !== null).length;
 
-  const order = TRIAL_ORDERS[teamId] || [1, 2, 3, 4];
-  const orderHtml = order.map((gameNum, index) => `
-    <div class="step-card">
-      <div class="step-badge">${index + 1}º</div>
-      <div class="step-title">Juego ${gameNum}</div>
-      <div class="step-name">${GAME_DETAILS[gameNum].name}</div>
-    </div>
-  `).join("");
-
-  // Construct page HTML structure
+  // Estructura HTML principal de la vista del equipo
   main.innerHTML = `
     <div class="team-page-container">
-      <!-- Top header / info card -->
+      <!-- Ficha de Cabecera con Info y Totales -->
       <section class="team-header-card">
         <div class="team-profile">
           <div class="team-avatar">E${teamId}</div>
@@ -120,15 +161,15 @@ export const Team = async (teamId) => {
         </div>
       </section>
 
-      <!-- Day 1 Trial Flow timeline -->
+      <!-- Línea de tiempo con el Orden de Pruebas Dinámico -->
       <section class="trial-flow-section">
-        <h3>Orden de Pruebas (Día 1)</h3>
-        <div class="flow-timeline">
-          ${orderHtml}
+        <h3 id="timeline-heading">Orden de Pruebas (Día 1)</h3>
+        <div class="flow-timeline" id="timeline-steps">
+          ${renderTimelineSteps(1, teamId)}
         </div>
       </section>
 
-      <!-- Tab navigation for game days -->
+      <!-- Selector de Pestañas por Días de Actividad -->
       <section class="tabs-section">
         <div class="tabs-buttons">
           <button class="tab-btn active" data-tab="dia1">Día 1 (Lunes 15)</button>
@@ -136,23 +177,23 @@ export const Team = async (teamId) => {
           <button class="tab-btn" data-tab="extras">Juegos Extra</button>
         </div>
 
-        <!-- Tab contents container -->
+        <!-- Contenedores con el listado de tarjetas por día -->
         <div class="tab-panes">
-          <!-- Día 1 -->
+          <!-- Juegos del Día 1 -->
           <div class="tab-pane active" id="pane-dia1">
             <div class="games-grid">
               ${renderGameCards(1, 4, scores)}
             </div>
           </div>
 
-          <!-- Día 2 -->
+          <!-- Juegos del Día 2 -->
           <div class="tab-pane" id="pane-dia2">
             <div class="games-grid">
               ${renderGameCards(5, 8, scores)}
             </div>
           </div>
 
-          <!-- Extras -->
+          <!-- Juegos Extras -->
           <div class="tab-pane" id="pane-extras">
             <div class="games-grid">
               ${renderGameCards(9, 10, scores)}
@@ -163,21 +204,39 @@ export const Team = async (teamId) => {
     </div>
   `;
 
-  // Wire up tabs events
+  // Controladores de eventos para el cambio de pestañas (Días)
   const tabButtons = main.querySelectorAll(".tab-btn");
   const tabPanes = main.querySelectorAll(".tab-pane");
+  
   tabButtons.forEach(btn => {
     btn.addEventListener("click", () => {
+      // Quitar clases activas de todas las pestañas
       tabButtons.forEach(b => b.classList.remove("active"));
       tabPanes.forEach(p => p.classList.remove("active"));
       
+      // Activar pestaña actual
       btn.classList.add("active");
       const activePane = main.querySelector(`#pane-${btn.dataset.tab}`);
       if (activePane) activePane.classList.add("active");
+      
+      // Actualizar dinámicamente el Orden de Pruebas superior
+      const timelineHeading = main.querySelector("#timeline-heading");
+      const timelineSteps = main.querySelector("#timeline-steps");
+      
+      if (btn.dataset.tab === "dia1") {
+        timelineHeading.textContent = "Orden de Pruebas (Día 1)";
+        timelineSteps.innerHTML = renderTimelineSteps(1, teamId);
+      } else if (btn.dataset.tab === "dia2") {
+        timelineHeading.textContent = "Orden de Pruebas (Día 2)";
+        timelineSteps.innerHTML = renderTimelineSteps(2, teamId);
+      } else {
+        timelineHeading.textContent = "Juegos Extra";
+        timelineSteps.innerHTML = renderTimelineSteps(3, teamId);
+      }
     });
   });
 
-  // Wire up input controls and save events
+  // Enlazar inputs, botones de incremento y guardado para cada uno de los 10 juegos
   for (let num = 1; num <= 10; num++) {
     const input = main.querySelector(`#score-input-${num}`);
     const btnLess = main.querySelector(`#btn-less-${num}`);
@@ -188,27 +247,28 @@ export const Team = async (teamId) => {
 
     if (!input || !btnSave) continue;
 
-    // Incrementor buttons logic
+    // Botón "-" decremento rápido
     btnLess.addEventListener("click", () => {
       const currentVal = parseFloat(input.value) || 0;
       if (currentVal > 0) {
         input.value = Math.max(0, currentVal - 1);
-        card.classList.add("is-dirty");
+        card.classList.add("is-dirty"); // Marca la tarjeta como "modificada pero sin guardar"
       }
     });
 
+    // Botón "+" incremento rápido
     btnMore.addEventListener("click", () => {
       const currentVal = parseFloat(input.value) || 0;
       input.value = currentVal + 1;
-      card.classList.add("is-dirty");
+      card.classList.add("is-dirty"); // Marca la tarjeta como "modificada pero sin guardar"
     });
 
-    // Mark card as dirty (modified) if input changes directly
+    // Cambios directos en el input de texto manual
     input.addEventListener("input", () => {
       card.classList.add("is-dirty");
     });
 
-    // Save button event listener
+    // Botón Guardar - Carga a Firestore
     btnSave.addEventListener("click", async () => {
       const value = parseFloat(input.value);
       if (isNaN(value) || value < 0) {
@@ -216,7 +276,7 @@ export const Team = async (teamId) => {
         return;
       }
 
-      // Enter saving state
+      // Bloquear elementos y mostrar loader
       btnSave.disabled = true;
       input.disabled = true;
       btnLess.disabled = true;
@@ -236,19 +296,19 @@ export const Team = async (teamId) => {
           fecha: new Date()
         });
 
-        // Update local score record
+        // Actualizar array de puntuaciones en memoria local
         scores[num - 1] = value;
 
-        // Visual feedback
+        // Quitar estado modificado y aplicar efecto CSS de éxito temporal
         card.classList.remove("is-dirty");
         card.classList.add("save-success");
         setTimeout(() => card.classList.remove("save-success"), 1500);
 
-        // Update saved points badge
+        // Actualizar etiqueta del marcador guardado
         scoreBadge.className = "saved-points-badge";
         scoreBadge.textContent = `${value} pts`;
 
-        // Update global stats
+        // Actualizar estadísticas superiores globales
         const updatedTotal = scores.reduce((acc, val) => acc + (val || 0), 0);
         const updatedCompleted = scores.filter(v => v !== null).length;
         main.querySelector("#team-total-points").textContent = updatedTotal;
@@ -261,7 +321,7 @@ export const Team = async (teamId) => {
         card.classList.add("save-error");
         setTimeout(() => card.classList.remove("save-error"), 1500);
       } finally {
-        // Exit saving state
+        // Desbloquear controles y restaurar texto original del botón
         btnSave.disabled = false;
         input.disabled = false;
         btnLess.disabled = false;
@@ -272,7 +332,13 @@ export const Team = async (teamId) => {
   }
 };
 
-// HTML rendering helper for game cards
+/**
+ * Función auxiliar para renderizar el listado HTML de las tarjetas de juego
+ * @param {number} start - Juego inicial (ej. 1)
+ * @param {number} end - Juego final (ej. 4)
+ * @param {Array} scores - Array local con los resultados cargados de Firebase
+ * @returns {string} Código HTML concatenado
+ */
 function renderGameCards(start, end, scores) {
   let html = "";
   for (let num = start; num <= end; num++) {

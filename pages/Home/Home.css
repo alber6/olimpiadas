@@ -1,12 +1,19 @@
-/* Home Dashboard Stylesheet */
+/* ==========================================================================
+   ESTILOS DE LA PÁGINA DE INICIO (Home.js - Dashboard Principal)
+   ========================================================================== */
 
+/* Contenedor principal del dashboard de inicio */
 .home-container {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 2.5rem;
 }
 
-/* Hero and Rules */
+/* ==========================================================================
+   SECCIÓN HERO / REGLAMENTO
+   ========================================================================== */
+
+/* Layout de cuadrícula superior que alinea el banner de bienvenida y las reglas generales */
 .hero-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -14,6 +21,7 @@
   align-items: stretch;
 }
 
+/* Tarjeta izquierda con mensaje de bienvenida y presentación */
 .hero-content {
   background: linear-gradient(135deg, var(--primary-glow), rgba(15, 23, 42, 0.4));
   border: 1px solid var(--glass-border);
@@ -40,6 +48,7 @@
   font-size: 1.1rem;
 }
 
+/* Tarjeta derecha con el listado del reglamento del evento */
 .rules-card {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
@@ -63,6 +72,7 @@
   gap: 1rem;
 }
 
+/* Fila individual para cada regla del reglamento */
 .rule-item {
   display: flex;
   gap: 1rem;
@@ -79,19 +89,24 @@
   color: var(--text-secondary);
 }
 
-/* Dashboard Grid */
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 2rem;
+/* Subtítulo o descripción corta debajo del encabezado de una sección */
+.section-desc {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-top: -0.5rem;
+  margin-bottom: 1.5rem;
 }
 
-/* Sections Core Layout */
-.leaderboard-section, .schedule-section {
+/* ==========================================================================
+   SECCIÓN 1: TABLA DE CLASIFICACIÓN (Leaderboard)
+   ========================================================================== */
+
+/* Contenedor que agrupa la tabla de clasificación a ancho completo */
+.leaderboard-section {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
-  padding: 1.5rem;
+  padding: 2rem;
   box-shadow: 0 4px 25px var(--glass-shadow);
   backdrop-filter: blur(12px);
 }
@@ -100,7 +115,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
   border-bottom: 1px solid var(--glass-border);
   padding-bottom: 0.75rem;
   flex-wrap: wrap;
@@ -108,11 +123,11 @@
 }
 
 .section-header h3 {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   color: var(--text-primary);
 }
 
-/* Live Indicator */
+/* Indicador visual parpadeante de sincronización en tiempo real */
 .live-indicator {
   font-size: 0.75rem;
   font-weight: 700;
@@ -141,34 +156,36 @@
   100% { transform: scale(0.8); opacity: 0.5; }
 }
 
-/* Leaderboard */
+/* Lista vertical contenedora de las filas de equipos */
 .leaderboard-container {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
+/* Fila interactiva correspondiente a un equipo en el marcador */
 .leaderboard-row {
   display: flex;
   align-items: center;
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.04);
   border-radius: var(--radius-sm);
-  padding: 1rem 1.25rem;
+  padding: 1rem 1.5rem;
   cursor: pointer;
   transition: var(--transition-smooth);
-  gap: 1.25rem;
+  gap: 1.5rem;
 }
 
 .leaderboard-row:hover {
   background: rgba(255, 255, 255, 0.05);
   border-color: var(--glass-border-hover);
-  transform: scale(1.01) translateX(2px);
+  transform: scale(1.005) translateX(2px);
 }
 
+/* Columna para la posición (medallas top 3 o números estándar) */
 .rank-col {
   width: 36px;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -181,8 +198,9 @@
   color: var(--text-muted);
 }
 
+/* Columna de identificación del equipo */
 .team-col {
-  width: 140px;
+  width: 150px;
   display: flex;
   flex-direction: column;
 }
@@ -190,7 +208,7 @@
 .team-name {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   color: var(--text-primary);
 }
 
@@ -199,6 +217,7 @@
   color: var(--text-muted);
 }
 
+/* Columna que integra la barra de progreso y minipuntuaciones de juegos */
 .progress-col {
   flex: 1;
   display: flex;
@@ -221,21 +240,23 @@
   transition: width 1s ease-in-out;
 }
 
+/* Contenedor de minipíldoras de puntuación */
 .mini-scores-container {
   display: flex;
-  gap: 3px;
+  gap: 4px;
   flex-wrap: wrap;
 }
 
+/* Píldora individual con la puntuación de un juego en el Leaderboard */
 .score-badge-mini {
-  width: 18px;
-  height: 18px;
-  font-size: 0.65rem;
+  width: 20px;
+  height: 20px;
+  font-size: 0.7rem;
   font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 3px;
+  border-radius: 4px;
   background: rgba(255, 255, 255, 0.03);
   color: var(--text-muted);
   border: 1px solid rgba(255, 255, 255, 0.04);
@@ -247,8 +268,9 @@
   border-color: rgba(99, 102, 241, 0.2);
 }
 
+/* Columna del total de puntos acumulados */
 .points-col {
-  width: 75px;
+  width: 90px;
   text-align: right;
   display: flex;
   align-items: baseline;
@@ -259,17 +281,18 @@
 .points-value {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 1.8rem;
+  font-size: 2rem;
   color: var(--accent);
 }
 
 .points-label {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
 }
 
+/* Columna del botón de acceso rápido */
 .action-col {
-  width: 70px;
+  width: 80px;
 }
 
 .btn-edit-scores {
@@ -293,26 +316,40 @@
   box-shadow: 0 0 10px var(--primary-glow);
 }
 
-/* Medal Highlights */
+/* Modificadores de resalte visual para los 3 primeros puestos (podio) */
 .leaderboard-row.rank-1 {
-  background: hsla(42, 100%, 55%, 0.03);
-  border-color: hsla(42, 100%, 55%, 0.15);
+  background: hsla(42, 100%, 55%, 0.04);
+  border-color: hsla(42, 100%, 55%, 0.2);
 }
 .leaderboard-row.rank-1 .team-name { color: var(--accent-hover); }
 .leaderboard-row.rank-1 .progress-bar-fill { background: linear-gradient(90deg, var(--accent), #eab308); }
 
 .leaderboard-row.rank-2 {
   background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .leaderboard-row.rank-3 {
-  background: hsla(28, 48%, 48%, 0.03);
-  border-color: hsla(28, 48%, 48%, 0.15);
+  background: hsla(28, 48%, 48%, 0.04);
+  border-color: hsla(28, 48%, 48%, 0.2);
 }
-.leaderboard-row.rank-3 .team-name { color: #cd7f32; }
+.leaderboard-row.rank-3 .team-name { color: #d97706; }
 
-/* Schedule Section */
+/* ==========================================================================
+   SECCIÓN 2: CRONOGRAMA DE ACTIVIDADES (PROMINENTE / DETALLADO)
+   ========================================================================== */
+
+/* Sección contenedora del cronograma ampliado a ancho completo */
+.schedule-section.expanded-schedule {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 2.5rem;
+  box-shadow: 0 4px 25px var(--glass-shadow);
+  backdrop-filter: blur(12px);
+}
+
+/* Pestañas de días en el cronograma */
 .schedule-tabs {
   display: flex;
   background: rgba(255, 255, 255, 0.03);
@@ -327,8 +364,8 @@
   color: var(--text-secondary);
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 0.9rem;
-  padding: 0.4rem 0.8rem;
+  font-size: 0.95rem;
+  padding: 0.5rem 1.2rem;
   cursor: pointer;
   border-radius: 4px;
   transition: var(--transition-smooth);
@@ -337,8 +374,10 @@
 .sch-tab-btn.active {
   background: var(--primary);
   color: #fff;
+  box-shadow: 0 2px 8px var(--primary-glow);
 }
 
+/* Paneles del cronograma */
 .sch-pane {
   display: none;
 }
@@ -348,88 +387,113 @@
   animation: fadeIn 0.4s ease;
 }
 
+/* Cuadrícula de juegos dentro del cronograma (1 sola columna muy ancha para tarjetas grandes) */
 .schedule-grid {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 2rem;
+  margin-top: 1.5rem;
 }
 
+/* Tarjeta grande de juego en el cronograma */
 .game-item-card {
   display: flex;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  border-radius: var(--radius-sm);
+  background: rgba(15, 23, 42, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-md);
   overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
   transition: var(--transition-smooth);
 }
 
 .game-item-card:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(15, 23, 42, 0.45);
   border-color: var(--glass-border-hover);
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
+/* Envoltura para las imágenes del cronograma - MÁS GRANDES Y VISIBLES */
 .game-img-wrapper {
-  width: 130px;
-  min-width: 130px;
+  width: 320px;
+  min-width: 320px;
+  height: 220px;
   position: relative;
   background: #000;
+  overflow: hidden;
 }
 
 .game-img-wrapper img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.85;
+  opacity: 0.8;
+  filter: saturate(90%);
   transition: var(--transition-smooth);
 }
 
 .game-item-card:hover .game-img-wrapper img {
   opacity: 1;
-  transform: scale(1.05);
+  filter: saturate(110%);
+  transform: scale(1.04);
 }
 
+/* Información textual del juego */
 .game-info {
-  padding: 1rem 1.25rem;
+  padding: 1.75rem 2rem;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.75rem;
   flex: 1;
+  justify-content: center;
+}
+
+/* Cabecera interna con badge y título del juego */
+.game-header-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .game-number-badge {
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   color: var(--accent);
   background: var(--accent-glow);
-  padding: 0.15rem 0.4rem;
-  border-radius: 3px;
-  width: max-content;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
   letter-spacing: 0.05em;
+  white-space: nowrap;
 }
 
 .game-info h4 {
-  font-size: 1.1rem;
+  font-size: 1.4rem;
+  font-family: var(--font-display);
 }
 
-.game-info p {
-  font-size: 0.85rem;
+/* Texto largo descriptivo del juego */
+.game-text {
+  font-size: 0.95rem;
   color: var(--text-secondary);
-  line-height: 1.4;
+  line-height: 1.6;
 }
 
+/* Burbuja con la regla de puntuación resaltada */
 .game-scoring-rule {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: var(--text-primary);
-  margin-top: 0.25rem;
+  margin-top: 0.5rem;
   background: rgba(255, 255, 255, 0.02);
-  padding: 0.35rem 0.60rem;
-  border-radius: 4px;
-  border-left: 2px solid var(--accent);
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--accent);
 }
 
-/* Home loading */
+/* ==========================================================================
+   CARGAS EN SEGUNDO PLANO
+   ========================================================================== */
+
 .home-loading-container {
   display: flex;
   flex-direction: column;
@@ -440,16 +504,34 @@
   color: var(--text-secondary);
 }
 
-/* Responsive Overrides */
+/* ==========================================================================
+   MEDIA QUERIES - RESPONSIVIDAD DEL CRONOGRAMA Y LEADERBOARD
+   ========================================================================== */
+
 @media screen and (max-width: 1024px) {
-  .dashboard-grid {
+  .hero-section {
     grid-template-columns: 1fr;
+  }
+  .game-img-wrapper {
+    width: 250px;
+    min-width: 250px;
   }
 }
 
 @media screen and (max-width: 768px) {
-  .hero-section {
-    grid-template-columns: 1fr;
+  .schedule-section.expanded-schedule {
+    padding: 1.5rem;
+  }
+  .game-item-card {
+    flex-direction: column;
+  }
+  .game-img-wrapper {
+    width: 100%;
+    height: 180px;
+    min-width: 100%;
+  }
+  .game-info {
+    padding: 1.25rem 1.5rem;
   }
 }
 
@@ -457,6 +539,7 @@
   .leaderboard-row {
     flex-wrap: wrap;
     gap: 0.5rem 1rem;
+    padding: 1rem;
   }
   .progress-col {
     width: 100%;
@@ -470,12 +553,5 @@
   .action-col {
     order: 3;
     width: auto;
-  }
-  .game-item-card {
-    flex-direction: column;
-  }
-  .game-img-wrapper {
-    width: 100%;
-    height: 120px;
   }
 }

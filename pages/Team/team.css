@@ -1,5 +1,8 @@
-/* Team Page Stylesheet */
+/* ==========================================================================
+   ESTILOS DE LA PÁGINA DE EQUIPO (Team.js)
+   ========================================================================== */
 
+/* Contenedor principal que envuelve todos los elementos de la página del equipo */
 .team-page-container {
   display: flex;
   flex-direction: column;
@@ -7,7 +10,7 @@
   animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Header Card */
+/* Tarjeta superior con la información del equipo y las estadísticas de puntos */
 .team-header-card {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
@@ -24,6 +27,7 @@
   overflow: hidden;
 }
 
+/* Decoración superior con gradiente de color olímpico */
 .team-header-card::before {
   content: '';
   position: absolute;
@@ -34,12 +38,14 @@
   background: linear-gradient(90deg, var(--primary), var(--accent));
 }
 
+/* Agrupamiento del avatar del equipo y su título */
 .team-profile {
   display: flex;
   align-items: center;
   gap: 1.5rem;
 }
 
+/* Avatar circular del equipo (ej: E1, E2) */
 .team-avatar {
   width: 64px;
   height: 64px;
@@ -55,6 +61,7 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
+/* Textos de títulos en la ficha de cabecera */
 .team-title-section h2 {
   font-size: 2rem;
   line-height: 1.2;
@@ -65,11 +72,13 @@
   font-size: 0.95rem;
 }
 
+/* Contenedor lateral para las cajas estadísticas de puntuación total */
 .team-stats {
   display: flex;
   gap: 1.5rem;
 }
 
+/* Caja individual que contiene un valor y una etiqueta estadística */
 .stat-box {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -79,6 +88,7 @@
   min-width: 120px;
 }
 
+/* Número grande representativo de la estadística */
 .stat-value {
   display: block;
   font-family: var(--font-display);
@@ -88,6 +98,7 @@
   line-height: 1.2;
 }
 
+/* Etiqueta descriptiva en minúsculas debajo de la estadística */
 .stat-label {
   display: block;
   font-size: 0.75rem;
@@ -97,7 +108,11 @@
   margin-top: 0.25rem;
 }
 
-/* Timeline Flow */
+/* ==========================================================================
+   LÍNEA DE TIEMPO DEL ORDEN DE JUEGOS (Trial Flow)
+   ========================================================================== */
+
+/* Sección de cabecera de la línea de tiempo */
 .trial-flow-section h3 {
   font-size: 1.25rem;
   margin-bottom: 1rem;
@@ -107,12 +122,14 @@
   letter-spacing: 0.05em;
 }
 
+/* Contenedor Grid con los 4 pasos horizontales */
 .flow-timeline {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
 }
 
+/* Tarjeta de paso individual dentro de la línea de tiempo */
 .step-card {
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -128,6 +145,7 @@
   transform: translateY(-2px);
 }
 
+/* Badge que indica la posición del paso (ej: 1º, 2º) */
 .step-badge {
   position: absolute;
   top: 1rem;
@@ -140,6 +158,7 @@
   border-radius: 20px;
 }
 
+/* Número de juego del paso */
 .step-title {
   font-size: 0.75rem;
   color: var(--text-muted);
@@ -148,6 +167,7 @@
   letter-spacing: 0.05em;
 }
 
+/* Nombre completo de la actividad del paso */
 .step-name {
   font-family: var(--font-display);
   font-weight: 600;
@@ -159,7 +179,11 @@
   text-overflow: ellipsis;
 }
 
-/* Tabs System */
+/* ==========================================================================
+   SISTEMA DE PESTAÑAS (Tabs)
+   ========================================================================== */
+
+/* Barra horizontal que agrupa los botones selectores de pestaña */
 .tabs-buttons {
   display: flex;
   gap: 0.75rem;
@@ -168,6 +192,7 @@
   padding-bottom: 0.5rem;
 }
 
+/* Botón individual de selección de pestaña */
 .tab-btn {
   background: none;
   border: none;
@@ -185,6 +210,7 @@
   color: var(--text-primary);
 }
 
+/* Estado activo de la pestaña seleccionada con barra brillante inferior */
 .tab-btn.active {
   color: var(--primary);
 }
@@ -200,6 +226,7 @@
   box-shadow: 0 0 8px var(--primary);
 }
 
+/* Paneles contenedores asociados a cada pestaña */
 .tab-pane {
   display: none;
 }
@@ -209,13 +236,18 @@
   animation: fadeIn 0.4s ease;
 }
 
-/* Games Grid & Cards */
+/* ==========================================================================
+   CUADRÍCULA DE JUEGOS Y TARJETAS (Games Grid)
+   ========================================================================== */
+
+/* Cuadrícula responsiva que alinea las tarjetas de juegos */
 .games-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 1.5rem;
 }
 
+/* Tarjeta de juego individual */
 .game-card {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
@@ -236,6 +268,7 @@
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 }
 
+/* Cabecera interna de la tarjeta de juego */
 .game-card-header {
   display: flex;
   justify-content: space-between;
@@ -243,6 +276,7 @@
   margin-bottom: 1rem;
 }
 
+/* Etiqueta del número de juego */
 .game-number {
   font-size: 0.75rem;
   font-weight: 700;
@@ -253,6 +287,7 @@
   border-radius: 4px;
 }
 
+/* Indicador con la puntuación actualmente registrada en la base de datos */
 .saved-points-badge {
   font-size: 0.8rem;
   font-weight: 600;
@@ -270,6 +305,7 @@
   border-color: transparent;
 }
 
+/* Contenido descriptivo del juego */
 .game-card-body h4 {
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
@@ -282,6 +318,7 @@
   min-height: 2.8rem;
 }
 
+/* Fila de controles en la parte inferior de la tarjeta */
 .game-card-footer {
   display: flex;
   gap: 1rem;
@@ -289,7 +326,7 @@
   justify-content: space-between;
 }
 
-/* Number inputs controls */
+/* Envoltura para los botones +/- e input de puntuación */
 .score-input-wrapper {
   display: flex;
   align-items: center;
@@ -305,6 +342,7 @@
   box-shadow: 0 0 0 2px var(--primary-glow);
 }
 
+/* Botón individual de ajuste de puntos (+ o -) */
 .btn-adjust {
   background: none;
   border: none;
@@ -328,6 +366,7 @@
   background: rgba(255, 255, 255, 0.1);
 }
 
+/* Campo de entrada numérica para la puntuación */
 .score-field {
   background: none;
   border: none;
@@ -348,6 +387,7 @@
   margin: 0;
 }
 
+/* Botón de guardar cambios */
 .btn-save {
   flex: 1;
   height: 38px;
@@ -380,7 +420,11 @@
   transform: none;
 }
 
-/* Save State modifiers */
+/* ==========================================================================
+   MODIFICADORES DE ESTADO (Save States)
+   ========================================================================== */
+
+/* Tarjeta en estado sucio (modificada pero no guardada en Firebase) */
 .game-card.is-dirty {
   border-color: var(--warning);
 }
@@ -398,12 +442,17 @@
   text-transform: uppercase;
 }
 
+/* Tarjeta en estado de éxito temporal al guardar */
 .game-card.save-success {
   border-color: var(--success);
   animation: pulse-success 1.5s cubic-bezier(0.16, 1, 0.3, 1) infinite;
 }
 
-/* Loading Spinners */
+/* ==========================================================================
+   SPINNERS DE CARGA (Loading/Saving)
+   ========================================================================== */
+
+/* Contenedor general del spinner de carga de página */
 .team-loading-container {
   display: flex;
   flex-direction: column;
@@ -414,6 +463,7 @@
   color: var(--text-secondary);
 }
 
+/* Spinner circular de carga de la página del equipo */
 .loading-spinner {
   width: 48px;
   height: 48px;
@@ -423,6 +473,7 @@
   animation: spinner 0.8s linear infinite;
 }
 
+/* Pequeño spinner circular dentro del botón Guardar durante la carga */
 .saving-loader {
   width: 18px;
   height: 18px;
@@ -432,7 +483,10 @@
   animation: spinner 0.6s linear infinite;
 }
 
-/* Responsive Overrides */
+/* ==========================================================================
+   MEDIA QUERIES - RESPONSIVIDAD
+   ========================================================================== */
+
 @media screen and (max-width: 900px) {
   .flow-timeline {
     grid-template-columns: repeat(2, 1fr);
