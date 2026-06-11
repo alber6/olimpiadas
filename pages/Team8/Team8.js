@@ -9,20 +9,8 @@ export const Team8= () => {
      main.innerHTML = `
     <div id = container-puntos8>
         <div class = grupos8>
-        <h2>Equipos 8 - Víctor, Ángel/Alba</h2>
-        <ul class = players>
-            <li>Jugador1</li>
-            <li>Jugador2</li>
-            <li>Jugador3</li>
-            <li>Jugador4</li>
-            <li>Jugador5</li>
-            <li>Jugador6</li>
-            <li>Jugador7</li>
-            <li>Jugador8</li>
-            <li>Jugador9</li>
-            <li>Jugador10</li>
-        </ul>
-        <p>Orden de las pruebas: 4, 1, 2, 3</p>
+        <h2>Equipo 8 - </h2>
+        <p>Orden de las pruebas: 4, 3, 1, 2</p>
         </div>
         <div class = grupos8>
         <h2>Puntos Día 1</h2>

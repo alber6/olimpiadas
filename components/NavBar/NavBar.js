@@ -5,7 +5,7 @@ export const Navbar = () => {
     header.innerHTML =
     `<nav>
     <a href="https://www.liceoiberico.com/"><img src="/images/logo.png" alt=""></a>
-    <h1>Olimpiadas 2025</h1>
+    <h1>Olimpiadas 2026</h1>
     <ul>
         <li>
             <a href="#" id="homelink" class="enlace">Home</a>

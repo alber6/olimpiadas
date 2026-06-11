@@ -9,20 +9,8 @@ export const Team4= () => {
     main.innerHTML = `
     <div id = container-puntos4>
         <div class = grupos4>
-        <h2>Equipos 4 - Javier y Julia</h2>
-        <ul class = players>
-            <li>Jugador1</li>
-            <li>Jugador2</li>
-            <li>Jugador3</li>
-            <li>Jugador4</li>
-            <li>Jugador5</li>
-            <li>Jugador6</li>
-            <li>Jugador7</li>
-            <li>Jugador8</li>
-            <li>Jugador9</li>
-            <li>Jugador10</li>
-        </ul>
-        <p>Orden de las pruebas: 2, 3, 4, 1</p>
+        <h2>Equipo 4 - </h2>
+        <p>Orden de las pruebas: 2, 4, 1, 3</p>
         </div>
         <div class = grupos4>
         <h2>Puntos Día 1</h2>
