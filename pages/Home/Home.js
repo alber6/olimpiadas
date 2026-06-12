@@ -58,14 +58,17 @@ export const HomeGames = async () => {
         <h2>Dia 1 -Lunes 15</h2>
             <section>
                 <h1>Juego 1</h1>
+                <img src="public/images/aros.webp" />
                 <p>PUNTERÍA CON LA MANO -- Lanzamientos con pelotas o pesos sobre aros o aros sobre conos. Se colocará a varias distancias, dependiendo de los cursos. Alumno por alumno (suma de puntos, cada posición puede valer 1, 2 o 3 puntos). <span>Material: 6 aros, 6 conos, 2 pelotas de gomaespuma o 2 pelotas de tenis.</span> </p>
             </section>
             <section>
                 <h1>Juego 2</h1>
+                <img src="public/images/aros.webp" />
                 <p>RELEVOS -- carrera clásica llegando hasta un punto determinado y volver pasando el testigo hasta que lo realice todo el grupo. (Recomendación: colocar al alumnado por niveles). Pueden puntuar por equipo ganador (10 puntos) o 1 cada vez que lleguen primero.<span>Material: Un testigo que puede ser una base de color.</span></p>
             </section>
             <section>
                 <h1>Juego 3</h1>
+                <img src="public/images/aros.webp" />
                 <p>PARACAÍDAS -- Todos los participantes se agarran alrededor del paracaídas y moviéndolo arriba y abajo intentan meter dentro del agujero del paracaídas la pelota. Pueden jugar 2 o 3 rondas cada equipo y el equipo que haya tardado menos conseguirá los 10 puntos. <span>Material: Paracaídas y 2 pelotas de gomaespuma.</span></p>
             </section>
             <section>
