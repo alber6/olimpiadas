@@ -187,3 +187,24 @@ header {
     padding: 0.3rem 0.6rem;
   }
 }
+
+@media screen and (max-width: 450px) {
+  .glass-nav {
+    padding: 0.6rem 0.8rem;
+    width: calc(100% - 1.5rem);
+    top: 0.75rem;
+  }
+  .logo-link img {
+    height: 26px;
+  }
+  .nav-menu {
+    gap: 0.5rem;
+  }
+  .nav-link {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.5rem;
+  }
+  .dropdown-menu {
+    width: 140px;
+  }
+}
