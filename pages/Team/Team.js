@@ -2,12 +2,10 @@ import { cleanPage } from "../../utils/cleanPage";
 import { db, setDoc, doc, collection, query, where, getDocs } from "../../firebase-config";
 import "./team.css";
 
-/**
- * CONFIGURACIÓN DE ORDEN DE PRUEBAS PARA CADA EQUIPO
- */
+// --- CONFIGURACIÓN DE ORDEN DE JUEGOS PARA CADA EQUIPO ---
 
-// Orden de pruebas para el Día 1 (Juegos del 1 al 4)
-const TRIAL_ORDERS_DAY1 = {
+// Orden en el que cada equipo juega el Día 1 (Juegos del 1 al 4)
+const ORDEN_JUEGOS_DIA1 = {
   1: [1, 2, 4, 3],
   2: [1, 3, 2, 4],
   3: [2, 1, 3, 4],
@@ -18,8 +16,8 @@ const TRIAL_ORDERS_DAY1 = {
   8: [4, 3, 1, 2]
 };
 
-// Orden de pruebas para el Día 2 (Juegos del 5 al 8)
-const TRIAL_ORDERS_DAY2 = {
+// Orden en el que cada equipo juega el Día 2 (Juegos del 5 al 8)
+const ORDEN_JUEGOS_DIA2 = {
   1: [5, 6, 8, 7],
   2: [5, 7, 6, 8],
   3: [6, 5, 7, 8],
@@ -30,146 +28,145 @@ const TRIAL_ORDERS_DAY2 = {
   8: [8, 7, 5, 6]
 };
 
-// Mapa detallado con los nombres e información rápida de cada juego
-const GAME_DETAILS = {
-  1: { name: "Puntería con la mano", desc: "Lanzamientos con pelotas hacia aros a diferentes distancias. 1 pto (cerca), 2 ptos (media), 3 ptos (lejos)." },
-  2: { name: "Relevos", desc: "Carrera clásica pasando el testigo. Realizado 3 veces. El ganador de cada ronda consigue 5 puntos." },
-  3: { name: "Baloncesto con cubos", desc: "Lanzamiento por parejas de espaldas con cubo en distancias: 1 pto (cerca), 2 ptos (media), 3 ptos (lejos)." },
-  4: { name: "Saltos de longitud", desc: "Salto a pies juntos sucesivo por todo el grupo. El equipo con mayor distancia gana 5 puntos (3 intentos)." },
-  5: { name: "Pasa aros", desc: "El grupo cogido de la mano debe pasar el aro por todos sin soltarse. 5 puntos para el ganador (3 rondas)." },
-  6: { name: "Vaso pajita", desc: "Pasar un vaso boca abajo con pajita en la boca sin manos. 10 ptos por completarlo, 5 ptos a la mitad." },
-  7: { name: "Pañuelos", desc: "Quitar pañuelos al rival sin perder el propio. 5 puntos por eliminar a todos los rivales (3 rondas)." },
-  8: { name: "Roba pelotas", desc: "Llevar pelotas de una en una al aro rival. 3 rondas, cada victoria otorga 5 puntos." },
-  9: { name: "Juego Extra 1", desc: "Juego de puntuación adicional según las directrices de los organizadores." },
-  10: { name: "Juego Extra 2", desc: "Juego de puntuación adicional según las directrices de los organizadores." }
+// Información detallada de todos los juegos del evento
+const DETALLES_DE_JUEGOS = {
+  1: { nombre: "Puntería con la mano", descripcion: "Lanzamientos con pelotas hacia aros a diferentes distancias. 1 pto (cerca), 2 ptos (media), 3 ptos (lejos)." },
+  2: { nombre: "Relevos", descripcion: "Carrera clásica pasando el testigo. Realizado 3 veces. El ganador de cada ronda consigue 5 puntos." },
+  3: { nombre: "Baloncesto con cubos", descripcion: "Lanzamiento por parejas de espaldas con cubo en distancias: 1 pto (cerca), 2 ptos (media), 3 ptos (lejos)." },
+  4: { nombre: "Saltos de longitud", descripcion: "Salto a pies juntos sucesivo por todo el grupo. El equipo con mayor distancia gana 5 puntos (3 intentos)." },
+  5: { nombre: "Pasa aros", descripcion: "El grupo cogido de la mano debe pasar el aro por todos sin soltarse. 5 puntos para el ganador (3 rondas)." },
+  6: { nombre: "Vaso pajita", descripcion: "Pasar un vaso boca abajo con pajita en la boca sin manos. 10 ptos por completarlo, 5 ptos a la mitad." },
+  7: { nombre: "Pañuelos", descripcion: "Quitar pañuelos al rival sin perder el propio. 5 puntos por eliminar a todos los rivales (3 rondas)." },
+  8: { nombre: "Roba pelotas", descripcion: "Llevar pelotas de una en una al aro rival. 3 rondas, cada victoria otorga 5 puntos." },
+  9: { nombre: "Juego Extra 1", descripcion: "Juego de puntuación adicional según las directrices de los organizadores." },
+  10: { nombre: "Juego Extra 2", descripcion: "Juego de puntuación adicional según las directrices de los organizadores." }
 };
 
-/**
- * Muestra una alerta flotante temporal en la pantalla (Toast Notification)
- * @param {string} message - Mensaje a mostrar
- * @param {string} type - Tipo de notificación ('success' para éxito, 'error' para errores)
- */
-function showToast(message, type = "success") {
-  let container = document.querySelector(".toast-container");
-  if (!container) {
-    container = document.createElement("div");
-    container.className = "toast-container";
-    document.body.appendChild(container);
+// Muestra una notificación flotante de éxito o error en la pantalla
+function mostrarAlertaFlotante(mensaje, tipo = "exito") {
+  let contenedorAlertas = document.querySelector(".toast-container");
+  if (!contenedorAlertas) {
+    contenedorAlertas = document.createElement("div");
+    contenedorAlertas.className = "toast-container";
+    document.body.appendChild(contenedorAlertas);
   }
   
-  const toast = document.createElement("div");
-  toast.className = `toast ${type}`;
+  const alerta = document.createElement("div");
+  alerta.className = `toast ${tipo === "exito" ? "success" : "error"}`;
   
-  const icon = type === "success" ? "✅" : type === "error" ? "❌" : "ℹ️";
-  toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
+  const icono = tipo === "exito" ? "✅" : "❌";
+  alerta.innerHTML = `<span>${icono}</span> <span>${mensaje}</span>`;
   
-  container.appendChild(toast);
+  contenedorAlertas.appendChild(alerta);
   
-  // Animación de salida inversa y posterior eliminación del DOM
+  // Ocultar y remover la alerta después de 3 segundos
   setTimeout(() => {
-    toast.style.animation = "slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) reverse forwards";
-    setTimeout(() => toast.remove(), 300);
+    alerta.style.animation = "slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) reverse forwards";
+    setTimeout(() => alerta.remove(), 300);
   }, 3000);
 }
 
-/**
- * Renderiza los pasos/cards de la línea de tiempo superior
- * @param {number} dayNum - Día de actividades (1 para Día 1, 2 para Día 2, 3 para Juegos Extra)
- * @param {number} teamId - ID numérico del equipo (1-8)
- * @returns {string} Código HTML con los pasos
- */
-function renderTimelineSteps(dayNum, teamId) {
-  let order = [];
-  if (dayNum === 1) {
-    order = TRIAL_ORDERS_DAY1[teamId] || [1, 2, 3, 4];
-  } else if (dayNum === 2) {
-    order = TRIAL_ORDERS_DAY2[teamId] || [5, 6, 7, 8];
+// Genera la lista visual de pasos de la línea de tiempo superior
+function generarLineaTiempoHTML(diaNumero, idEquipo) {
+  let listaJuegos = [];
+  if (diaNumero === 1) {
+    listaJuegos = ORDEN_JUEGOS_DIA1[idEquipo] || [1, 2, 3, 4];
+  } else if (diaNumero === 2) {
+    listaJuegos = ORDEN_JUEGOS_DIA2[idEquipo] || [5, 6, 7, 8];
   } else {
-    order = [9, 10]; // Juegos Extra
+    listaJuegos = [9, 10]; // Juegos Extra
   }
 
-  return order.map((gameNum, index) => `
-    <div class="step-card">
-      <div class="step-badge">${index + 1}º</div>
-      <div class="step-title">Juego ${gameNum}</div>
-      <div class="step-name">${GAME_DETAILS[gameNum].name}</div>
-    </div>
-  `).join("");
+  return listaJuegos.map((numeroJuego, indicePaso) => {
+    // Para el Día 2 (juegos 5-8), restamos 4 para mostrar "Juego 1, 2, 3, 4" en la interfaz
+    // Para Extras (juegos 9-10), restamos 8 para mostrar "Juego 1, 2"
+    let numeroParaMostrar = numeroJuego;
+    if (numeroJuego >= 5 && numeroJuego <= 8) {
+      numeroParaMostrar = numeroJuego - 4;
+    } else if (numeroJuego >= 9) {
+      numeroParaMostrar = numeroJuego - 8;
+    }
+
+    return `
+      <div class="step-card">
+        <div class="step-badge">${indicePaso + 1}º</div>
+        <div class="step-title">Juego ${numeroParaMostrar}</div>
+        <div class="step-name">${DETALLES_DE_JUEGOS[numeroJuego].nombre}</div>
+      </div>
+    `;
+  }).join("");
 }
 
-/**
- * Componente principal para el Panel del Equipo
- * @param {number} teamId - ID del equipo (1-8)
- */
-export const Team = async (teamId) => {
-  const main = document.querySelector("main");
-  cleanPage(main);
+// Componente para la pantalla de control y carga de puntos de un equipo
+export const Team = async (idEquipo) => {
+  const contenedorPrincipal = document.querySelector("main");
+  cleanPage(contenedorPrincipal);
 
-  // Estado de carga inicial
-  main.innerHTML = `
+  // Pantalla de carga mientras se obtienen los datos de la base de datos
+  contenedorPrincipal.innerHTML = `
     <div class="team-loading-container">
       <div class="loading-spinner"></div>
-      <p>Cargando información del Equipo ${teamId}...</p>
+      <p>Cargando información del Equipo ${idEquipo}...</p>
     </div>
   `;
 
-  // Inicialización del array local de puntos (10 juegos, por defecto null si no se han cargado)
-  const scores = Array(10).fill(null);
+  // Array para guardar las puntuaciones (10 juegos, inician como null)
+  const puntosDeJuegos = Array(10).fill(null);
   
   try {
-    const colRef = collection(db, "resultados");
-    const q = query(colRef, where("equipo", "==", `Team ${teamId}`));
-    const snapshot = await getDocs(q);
+    const referenciaColeccion = collection(db, "resultados");
+    const consultaFiltrada = query(referenciaColeccion, where("equipo", "==", `Team ${idEquipo}`));
+    const documentosObtenidos = await getDocs(consultaFiltrada);
     
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      const index = data.juegoNumero;
-      if (typeof index === "number" && index >= 1 && index <= 10) {
-        scores[index - 1] = data.puntos;
+    documentosObtenidos.forEach(documento => {
+      const datos = documento.data();
+      const numeroDeJuego = datos.juegoNumero;
+      if (typeof numeroDeJuego === "number" && numeroDeJuego >= 1 && numeroDeJuego <= 10) {
+        puntosDeJuegos[numeroDeJuego - 1] = datos.puntos;
       }
     });
   } catch (error) {
-    console.error("Error al cargar puntuaciones de Firebase:", error);
-    showToast("Error al pre-cargar las puntuaciones", "error");
+    console.error("Error al conectar con la base de datos:", error);
+    mostrarAlertaFlotante("Error al cargar las puntuaciones de la base de datos", "error");
   }
 
-  // Cálculos iniciales para el resumen de estadísticas
-  const totalPoints = scores.reduce((acc, val) => acc + (val || 0), 0);
-  const completedGames = scores.filter(v => v !== null).length;
+  // Cálculos iniciales para el panel de información
+  const puntosTotales = puntosDeJuegos.reduce((acumulado, valor) => acumulado + (valor || 0), 0);
+  const juegosRegistrados = puntosDeJuegos.filter(valor => valor !== null).length;
 
-  // Estructura HTML principal de la vista del equipo
-  main.innerHTML = `
+  // Generar HTML principal del panel de control
+  contenedorPrincipal.innerHTML = `
     <div class="team-page-container">
-      <!-- Ficha de Cabecera con Info y Totales -->
+      <!-- Ficha de cabecera con avatar e información general del equipo -->
       <section class="team-header-card">
         <div class="team-profile">
-          <div class="team-avatar">E${teamId}</div>
+          <div class="team-avatar">E${idEquipo}</div>
           <div class="team-title-section">
-            <h2>Equipo ${teamId}</h2>
+            <h2>Equipo ${idEquipo}</h2>
             <p>Panel de Control y Carga de Puntos</p>
           </div>
         </div>
         <div class="team-stats">
           <div class="stat-box">
-            <span class="stat-value" id="team-total-points">${totalPoints}</span>
+            <span class="stat-value" id="team-total-points">${puntosTotales}</span>
             <span class="stat-label">Puntos Totales</span>
           </div>
           <div class="stat-box">
-            <span class="stat-value" id="team-completed-games">${completedGames}/10</span>
+            <span class="stat-value" id="team-completed-games">${juegosRegistrados}/10</span>
             <span class="stat-label">Juegos Registrados</span>
           </div>
         </div>
       </section>
 
-      <!-- Línea de tiempo con el Orden de Pruebas Dinámico -->
+      <!-- Línea de tiempo que indica el orden en el que deben jugar -->
       <section class="trial-flow-section">
         <h3 id="timeline-heading">Orden de Pruebas (Día 1)</h3>
         <div class="flow-timeline" id="timeline-steps">
-          ${renderTimelineSteps(1, teamId)}
+          ${generarLineaTiempoHTML(1, idEquipo)}
         </div>
       </section>
 
-      <!-- Selector de Pestañas por Días de Actividad -->
+      <!-- Selector de pestañas para cambiar de día -->
       <section class="tabs-section">
         <div class="tabs-buttons">
           <button class="tab-btn active" data-tab="dia1">Día 1 (Lunes 15)</button>
@@ -179,24 +176,24 @@ export const Team = async (teamId) => {
 
         <!-- Contenedores con el listado de tarjetas por día -->
         <div class="tab-panes">
-          <!-- Juegos del Día 1 -->
+          <!-- Tarjetas del Día 1 (Juegos 1 al 4) -->
           <div class="tab-pane active" id="pane-dia1">
             <div class="games-grid">
-              ${renderGameCards(1, 4, scores)}
+              ${generarTarjetasJuegoHTML(1, 4, puntosDeJuegos)}
             </div>
           </div>
 
-          <!-- Juegos del Día 2 -->
+          <!-- Tarjetas del Día 2 (Juegos 5 al 8 en DB, 1 al 4 en la vista) -->
           <div class="tab-pane" id="pane-dia2">
             <div class="games-grid">
-              ${renderGameCards(5, 8, scores)}
+              ${generarTarjetasJuegoHTML(5, 8, puntosDeJuegos)}
             </div>
           </div>
 
-          <!-- Juegos Extras -->
+          <!-- Tarjetas de Juegos Extras (Juegos 9 y 10) -->
           <div class="tab-pane" id="pane-extras">
             <div class="games-grid">
-              ${renderGameCards(9, 10, scores)}
+              ${generarTarjetasJuegoHTML(9, 10, puntosDeJuegos)}
             </div>
           </div>
         </div>
@@ -204,164 +201,169 @@ export const Team = async (teamId) => {
     </div>
   `;
 
-  // Controladores de eventos para el cambio de pestañas (Días)
-  const tabButtons = main.querySelectorAll(".tab-btn");
-  const tabPanes = main.querySelectorAll(".tab-pane");
+  // Controladores de eventos para cambiar entre las pestañas de días
+  const botonesPestañas = contenedorPrincipal.querySelectorAll(".tab-btn");
+  const panelesPestañas = contenedorPrincipal.querySelectorAll(".tab-pane");
   
-  tabButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      // Quitar clases activas de todas las pestañas
-      tabButtons.forEach(b => b.classList.remove("active"));
-      tabPanes.forEach(p => p.classList.remove("active"));
+  botonesPestañas.forEach(boton => {
+    boton.addEventListener("click", () => {
+      botonesPestañas.forEach(b => b.classList.remove("active"));
+      panelesPestañas.forEach(p => p.classList.remove("active"));
       
-      // Activar pestaña actual
-      btn.classList.add("active");
-      const activePane = main.querySelector(`#pane-${btn.dataset.tab}`);
-      if (activePane) activePane.classList.add("active");
+      boton.classList.add("active");
+      const panelActivo = contenedorPrincipal.querySelector(`#pane-${boton.dataset.tab}`);
+      if (panelActivo) panelActivo.classList.add("active");
       
-      // Actualizar dinámicamente el Orden de Pruebas superior
-      const timelineHeading = main.querySelector("#timeline-heading");
-      const timelineSteps = main.querySelector("#timeline-steps");
+      const cabeceraTimeline = contenedorPrincipal.querySelector("#timeline-heading");
+      const pasosTimeline = contenedorPrincipal.querySelector("#timeline-steps");
       
-      if (btn.dataset.tab === "dia1") {
-        timelineHeading.textContent = "Orden de Pruebas (Día 1)";
-        timelineSteps.innerHTML = renderTimelineSteps(1, teamId);
-      } else if (btn.dataset.tab === "dia2") {
-        timelineHeading.textContent = "Orden de Pruebas (Día 2)";
-        timelineSteps.innerHTML = renderTimelineSteps(2, teamId);
+      if (boton.dataset.tab === "dia1") {
+        cabeceraTimeline.textContent = "Orden de Pruebas (Día 1)";
+        pasosTimeline.innerHTML = generarLineaTiempoHTML(1, idEquipo);
+      } else if (boton.dataset.tab === "dia2") {
+        cabeceraTimeline.textContent = "Orden de Pruebas (Día 2)";
+        pasosTimeline.innerHTML = generarLineaTiempoHTML(2, idEquipo);
       } else {
-        timelineHeading.textContent = "Juegos Extra";
-        timelineSteps.innerHTML = renderTimelineSteps(3, teamId);
+        cabeceraTimeline.textContent = "Juegos Extra";
+        pasosTimeline.innerHTML = generarLineaTiempoHTML(3, idEquipo);
       }
     });
   });
 
-  // Enlazar inputs, botones de incremento y guardado para cada uno de los 10 juegos
+  // Vincular eventos de incrementar, decrementar y guardar para cada uno de los 10 juegos
   for (let num = 1; num <= 10; num++) {
-    const input = main.querySelector(`#score-input-${num}`);
-    const btnLess = main.querySelector(`#btn-less-${num}`);
-    const btnMore = main.querySelector(`#btn-more-${num}`);
-    const btnSave = main.querySelector(`#btn-save-${num}`);
-    const scoreBadge = main.querySelector(`#saved-badge-${num}`);
-    const card = main.querySelector(`#game-card-${num}`);
+    const selectorInput = contenedorPrincipal.querySelector(`#score-input-${num}`);
+    const botonRestar = contenedorPrincipal.querySelector(`#btn-less-${num}`);
+    const botonSumar = contenedorPrincipal.querySelector(`#btn-more-${num}`);
+    const botonGuardar = contenedorPrincipal.querySelector(`#btn-save-${num}`);
+    const etiquetaPuntosGuardados = contenedorPrincipal.querySelector(`#saved-badge-${num}`);
+    const tarjetaJuego = contenedorPrincipal.querySelector(`#game-card-${num}`);
 
-    if (!input || !btnSave) continue;
+    if (!selectorInput || !botonGuardar) continue;
 
-    // Botón "-" decremento rápido
-    btnLess.addEventListener("click", () => {
-      const currentVal = parseFloat(input.value) || 0;
-      if (currentVal > 0) {
-        input.value = Math.max(0, currentVal - 1);
-        card.classList.add("is-dirty"); // Marca la tarjeta como "modificada pero sin guardar"
+    // Acción para decrementar en 1
+    botonRestar.addEventListener("click", () => {
+      const valorActual = parseFloat(selectorInput.value) || 0;
+      if (valorActual > 0) {
+        selectorInput.value = Math.max(0, valorActual - 1);
+        tarjetaJuego.classList.add("is-dirty"); // Agrega la etiqueta visual "Sin guardar"
       }
     });
 
-    // Botón "+" incremento rápido
-    btnMore.addEventListener("click", () => {
-      const currentVal = parseFloat(input.value) || 0;
-      input.value = currentVal + 1;
-      card.classList.add("is-dirty"); // Marca la tarjeta como "modificada pero sin guardar"
+    // Acción para incrementar en 1
+    botonSumar.addEventListener("click", () => {
+      const valorActual = parseFloat(selectorInput.value) || 0;
+      selectorInput.value = valorActual + 1;
+      tarjetaJuego.classList.add("is-dirty"); // Agrega la etiqueta visual "Sin guardar"
     });
 
-    // Cambios directos en el input de texto manual
-    input.addEventListener("input", () => {
-      card.classList.add("is-dirty");
+    // Acción si el usuario escribe directamente en el campo de texto
+    selectorInput.addEventListener("input", () => {
+      tarjetaJuego.classList.add("is-dirty");
     });
 
-    // Botón Guardar - Carga a Firestore
-    btnSave.addEventListener("click", async () => {
-      const value = parseFloat(input.value);
-      if (isNaN(value) || value < 0) {
-        showToast("Por favor, introduce una puntuación válida (0 o mayor).", "error");
+    // Acción para guardar los puntos en Firebase
+    botonGuardar.addEventListener("click", async () => {
+      const valorAGuardar = parseFloat(selectorInput.value);
+      if (isNaN(valorAGuardar) || valorAGuardar < 0) {
+        mostrarAlertaFlotante("Por favor, introduce una puntuación válida (0 o mayor).", "error");
         return;
       }
 
-      // Bloquear elementos y mostrar loader
-      btnSave.disabled = true;
-      input.disabled = true;
-      btnLess.disabled = true;
-      btnMore.disabled = true;
-      btnSave.innerHTML = `<span class="saving-loader"></span>`;
+      // Bloquear campos de entrada durante la subida de datos
+      botonGuardar.disabled = true;
+      selectorInput.disabled = true;
+      botonRestar.disabled = true;
+      botonSumar.disabled = true;
+      botonGuardar.innerHTML = `<span class="saving-loader"></span>`;
 
       try {
-        const docId = `team${teamId}-juego${num}`;
-        const docRef = doc(db, "resultados", docId);
+        const idDocumentoBaseDatos = `team${idEquipo}-juego${num}`;
+        const referenciaDocumento = doc(db, "resultados", idDocumentoBaseDatos);
 
-        await setDoc(docRef, {
-          equipo: `Team ${teamId}`,
+        await setDoc(referenciaDocumento, {
+          equipo: `Team ${idEquipo}`,
           juego: `Juego ${num}`,
           juegoNumero: num,
-          puntos: value,
+          puntos: valorAGuardar,
           dia: num <= 4 ? "Día 1" : num <= 8 ? "Día 2" : "Extra",
           fecha: new Date()
         });
 
-        // Actualizar array de puntuaciones en memoria local
-        scores[num - 1] = value;
+        // Guardar la puntuación en la memoria del componente
+        puntosDeJuegos[num - 1] = valorAGuardar;
 
-        // Quitar estado modificado y aplicar efecto CSS de éxito temporal
-        card.classList.remove("is-dirty");
-        card.classList.add("save-success");
-        setTimeout(() => card.classList.remove("save-success"), 1500);
+        // Limpiar la clase "Sin guardar" y añadir destello de éxito
+        tarjetaJuego.classList.remove("is-dirty");
+        tarjetaJuego.classList.add("save-success");
+        setTimeout(() => tarjetaJuego.classList.remove("save-success"), 1500);
 
-        // Actualizar etiqueta del marcador guardado
-        scoreBadge.className = "saved-points-badge";
-        scoreBadge.textContent = `${value} pts`;
+        // Actualizar la etiqueta visual del marcador actual
+        etiquetaPuntosGuardados.className = "saved-points-badge";
+        etiquetaPuntosGuardados.textContent = `${valorAGuardar} pts`;
 
-        // Actualizar estadísticas superiores globales
-        const updatedTotal = scores.reduce((acc, val) => acc + (val || 0), 0);
-        const updatedCompleted = scores.filter(v => v !== null).length;
-        main.querySelector("#team-total-points").textContent = updatedTotal;
-        main.querySelector("#team-completed-games").textContent = `${updatedCompleted}/10`;
+        // Recalcular y actualizar totales
+        const nuevoTotal = puntosDeJuegos.reduce((acumulado, valor) => acumulado + (valor || 0), 0);
+        const nuevosCompletados = puntosDeJuegos.filter(valor => valor !== null).length;
+        contenedorPrincipal.querySelector("#team-total-points").textContent = nuevoTotal;
+        contenedorPrincipal.querySelector("#team-completed-games").textContent = `${nuevosCompletados}/10`;
 
-        showToast(`¡Juego ${num} guardado con ${value} puntos!`);
+        // Calcular número para mostrar en la alerta ("Juego 1, 2, 3 o 4")
+        const numeroParaMostrar = num <= 4 ? num : (num <= 8 ? num - 4 : num - 8);
+        const etiquetaDia = num <= 4 ? "Día 1" : num <= 8 ? "Día 2" : "Extra";
+        mostrarAlertaFlotante(`¡Juego ${numeroParaMostrar} (${etiquetaDia}) guardado con ${valorAGuardar} puntos!`, "exito");
       } catch (error) {
-        console.error("Error al guardar puntuación:", error);
-        showToast("Error al guardar en la base de datos.", "error");
-        card.classList.add("save-error");
-        setTimeout(() => card.classList.remove("save-error"), 1500);
+        console.error("Error al guardar puntuación en Firebase:", error);
+        mostrarAlertaFlotante("Error al conectar con la base de datos", "error");
+        tarjetaJuego.classList.add("save-error");
+        setTimeout(() => tarjetaJuego.classList.remove("save-error"), 1500);
       } finally {
-        // Desbloquear controles y restaurar texto original del botón
-        btnSave.disabled = false;
-        input.disabled = false;
-        btnLess.disabled = false;
-        btnMore.disabled = false;
-        btnSave.innerHTML = `Guardar`;
+        // Desbloquear controles
+        botonGuardar.disabled = false;
+        selectorInput.disabled = false;
+        botonRestar.disabled = false;
+        botonSumar.disabled = false;
+        botonGuardar.innerHTML = `Guardar`;
       }
     });
   }
 };
 
-/**
- * Función auxiliar para renderizar el listado HTML de las tarjetas de juego
- * @param {number} start - Juego inicial (ej. 1)
- * @param {number} end - Juego final (ej. 4)
- * @param {Array} scores - Array local con los resultados cargados de Firebase
- * @returns {string} Código HTML concatenado
- */
-function renderGameCards(start, end, scores) {
-  let html = "";
-  for (let num = start; num <= end; num++) {
-    const savedScore = scores[num - 1];
-    const details = GAME_DETAILS[num];
-    const hasScore = savedScore !== null;
+// Genera el listado HTML de las tarjetas de entrada para los juegos
+function generarTarjetasJuegoHTML(rangoInicio, rangoFin, puntosDeJuegos) {
+  let codigoHTML = "";
+  for (let num = rangoInicio; num <= rangoFin; num++) {
+    const puntuacionGuardada = puntosDeJuegos[num - 1];
+    const informacionJuego = DETALLES_DE_JUEGOS[num];
+    const tienePuntos = puntuacionGuardada !== null;
     
-    html += `
+    // Si es del Día 2 (juegos 5-8), mostramos en la tarjeta "JUEGO 1, 2, 3, 4"
+    // Si es Extra (juegos 9-10), mostramos "JUEGO 1 EXTRA, 2 EXTRA"
+    let numeroParaMostrar = num;
+    let etiquetaExtra = "";
+    if (num >= 5 && num <= 8) {
+      numeroParaMostrar = num - 4;
+    } else if (num >= 9) {
+      numeroParaMostrar = num - 8;
+      etiquetaExtra = " EXTRA";
+    }
+    
+    codigoHTML += `
       <div class="game-card" id="game-card-${num}">
         <div class="game-card-header">
-          <span class="game-number">JUEGO ${num}</span>
-          <span class="saved-points-badge ${hasScore ? '' : 'empty'}" id="saved-badge-${num}">
-            ${hasScore ? savedScore + ' pts' : 'Sin registrar'}
+          <span class="game-number">JUEGO ${numeroParaMostrar}${etiquetaExtra}</span>
+          <span class="saved-points-badge ${tienePuntos ? '' : 'empty'}" id="saved-badge-${num}">
+            ${tienePuntos ? puntuacionGuardada + ' pts' : 'Sin registrar'}
           </span>
         </div>
         <div class="game-card-body">
-          <h4>${details.name}</h4>
-          <p>${details.desc}</p>
+          <h4>${informacionJuego.nombre}</h4>
+          <p>${informacionJuego.descripcion}</p>
         </div>
         <div class="game-card-footer">
           <div class="score-input-wrapper">
             <button type="button" class="btn-adjust" id="btn-less-${num}">−</button>
-            <input type="number" class="score-field" id="score-input-${num}" value="${hasScore ? savedScore : ''}" placeholder="0" min="0">
+            <input type="number" class="score-field" id="score-input-${num}" value="${tienePuntos ? puntuacionGuardada : ''}" placeholder="0" min="0">
             <button type="button" class="btn-adjust" id="btn-more-${num}">+</button>
           </div>
           <button type="button" class="btn-save" id="btn-save-${num}">Guardar</button>
@@ -369,5 +371,5 @@ function renderGameCards(start, end, scores) {
       </div>
     `;
   }
-  return html;
+  return codigoHTML;
 }

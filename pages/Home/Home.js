@@ -4,122 +4,117 @@ import { db } from "../../firebase-config.js";
 import { collection, query, where, getDocs } from "../../firebase-config.js";
 import { Team } from "../Team/Team";
 
-/**
- * Consulta y devuelve las puntuaciones de un equipo en Firestore
- * @param {string} teamName - Nombre del equipo (ej: "Team 1")
- * @returns {Array<number>} Array con 10 posiciones correspondientes a los juegos
- */
-export async function getGameScores(teamName) {
-  const scores = Array(10).fill(0); 
-  const colRef = collection(db, "resultados");
-  const q = query(colRef, where("equipo", "==", teamName));
+// Obtiene las puntuaciones de la base de datos para un equipo específico
+export async function getGameScores(nombreDelEquipo) {
+  const listadoDePuntos = Array(10).fill(0); 
+  const referenciaResultados = collection(db, "resultados");
+  const consultaEquipos = query(referenciaResultados, where("equipo", "==", nombreDelEquipo));
   
   try {
-    const snapshot = await getDocs(q);
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      const index = data.juegoNumero;
-      if (typeof index === "number" && index >= 1 && index <= 10) {
-        scores[index - 1] = data.puntos || 0;
+    const documentosObtenidos = await getDocs(consultaEquipos);
+    documentosObtenidos.forEach(documento => {
+      const datos = documento.data();
+      const numeroDeJuego = datos.juegoNumero;
+      if (typeof numeroDeJuego === "number" && numeroDeJuego >= 1 && numeroDeJuego <= 10) {
+        listadoDePuntos[numeroDeJuego - 1] = datos.puntos || 0;
       }
     });
   } catch (error) {
-    console.error(`Error al obtener puntuación para ${teamName}:`, error);
+    console.error(`Error al obtener puntuación para ${nombreDelEquipo}:`, error);
   }
-  return scores;
+  return listadoDePuntos;
 }
 
-/**
- * Componente de la Página de Inicio (Dashboard Principal)
- */
+// Componente para pintar la página de inicio con la clasificación y el cronograma
 export const HomeGames = async () => {
-  const main = document.querySelector("main");
-  cleanPage(main);
+  const contenedorPrincipal = document.querySelector("main");
+  cleanPage(contenedorPrincipal);
 
-  // Estado de carga inicial de la página
-  main.innerHTML = `
+  // Pantalla de carga mientras se consultan las puntuaciones de los equipos
+  contenedorPrincipal.innerHTML = `
     <div class="home-loading-container">
       <div class="loading-spinner"></div>
       <p>Cargando Clasificación en Tiempo Real...</p>
     </div>
   `;
 
-  // Cargar puntuaciones de los 8 equipos en paralelo
-  const teams = [];
+  // Cargar en paralelo las puntuaciones de los 8 equipos
+  const listaEquipos = [];
   try {
-    const fetchPromises = Array.from({ length: 8 }, (_, i) => {
-      const teamId = i + 1;
-      return getGameScores(`Team ${teamId}`).then(scores => {
-        const total = scores.reduce((acc, val) => acc + val, 0);
-        const completed = scores.filter(s => s > 0).length;
-        teams.push({ id: teamId, scores, total, completed });
+    const listadoPromesas = Array.from({ length: 8 }, (_, indice) => {
+      const idEquipo = indice + 1;
+      return getGameScores(`Team ${idEquipo}`).then(puntos => {
+        const puntuacionTotal = puntos.reduce((acumulado, valor) => acumulado + valor, 0);
+        const juegosConPuntos = puntos.filter(valor => valor > 0).length;
+        listaEquipos.push({ id: idEquipo, scores: puntos, total: puntuacionTotal, completed: juegosConPuntos });
       });
     });
     
-    await Promise.all(fetchPromises);
+    await Promise.all(listadoPromesas);
   } catch (error) {
     console.error("Error al cargar la información de los equipos:", error);
   }
 
-  // Ordenar equipos de mayor a menor puntuación total
-  teams.sort((a, b) => b.total - a.total);
+  // Ordenar los equipos de mayor a menor puntuación total para la clasificación
+  listaEquipos.sort((equipoA, equipoB) => equipoB.total - equipoA.total);
 
-  // Renderizar filas de la tabla de clasificación (Leaderboard)
-  const leaderboardHTML = teams.map((team, index) => {
-    let medal = "";
-    let rankClass = "";
-    if (index === 0) {
-      medal = "🥇";
-      rankClass = "rank-1";
-    } else if (index === 1) {
-      medal = "🥈";
-      rankClass = "rank-2";
-    } else if (index === 2) {
-      medal = "🥉";
-      rankClass = "rank-3";
+  // Generar el HTML de las filas de la tabla de clasificación
+  const tablaClasificacionHTML = listaEquipos.map((equipo, indiceClasificacion) => {
+    let medallaOEspecificacion = "";
+    let claseDeFila = "";
+    
+    if (indiceClasificacion === 0) {
+      medallaOEspecificacion = "🥇";
+      claseDeFila = "rank-1";
+    } else if (indiceClasificacion === 1) {
+      medallaOEspecificacion = "🥈";
+      claseDeFila = "rank-2";
+    } else if (indiceClasificacion === 2) {
+      medallaOEspecificacion = "🥉";
+      claseDeFila = "rank-3";
     } else {
-      medal = `<span class="rank-number">${index + 1}</span>`;
+      medallaOEspecificacion = `<span class="rank-number">${indiceClasificacion + 1}</span>`;
     }
 
-    // Calcular porcentaje relativo al líder para la barra de progreso visual
-    const maxScore = Math.max(...teams.map(t => t.total), 1);
-    const progressPercent = Math.min(100, Math.round((team.total / maxScore) * 100));
+    // Calcular el progreso porcentual respecto a la puntuación del líder
+    const puntuacionMaxima = Math.max(...listaEquipos.map(eq => eq.total), 1);
+    const porcentajeProgreso = Math.min(100, Math.round((equipo.total / puntuacionMaxima) * 100));
 
-    // Generar pequeños badges para cada uno de los 10 juegos
-    const scoreBadges = team.scores.map((score, sIndex) => `
-      <span class="score-badge-mini ${score > 0 ? 'active' : ''}" title="Juego ${sIndex + 1}: ${score} pts">
-        ${score}
+    // Generar pequeñas esferas indicativas de puntos por juego
+    const esferasPuntuacionHTML = equipo.scores.map((puntosJuego, indiceJuego) => `
+      <span class="score-badge-mini ${puntosJuego > 0 ? 'active' : ''}" title="Juego ${indiceJuego + 1}: ${puntosJuego} pts">
+        ${puntosJuego}
       </span>
     `).join("");
 
     return `
-      <div class="leaderboard-row ${rankClass}" data-team-id="${team.id}">
-        <div class="rank-col">${medal}</div>
+      <div class="leaderboard-row ${claseDeFila}" data-team-id="${equipo.id}">
+        <div class="rank-col">${medallaOEspecificacion}</div>
         <div class="team-col">
-          <span class="team-name">Equipo ${team.id}</span>
-          <span class="team-details">Juegos registrados: ${team.completed}/10</span>
+          <span class="team-name">Equipo ${equipo.id}</span>
+          <span class="team-details">Juegos registrados: ${equipo.completed}/10</span>
         </div>
         <div class="progress-col">
           <div class="progress-bar-bg">
-            <div class="progress-bar-fill" style="width: ${progressPercent}%"></div>
+            <div class="progress-bar-fill" style="width: ${porcentajeProgreso}%"></div>
           </div>
-          <div class="mini-scores-container">${scoreBadges}</div>
+          <div class="mini-scores-container">${esferasPuntuacionHTML}</div>
         </div>
         <div class="points-col">
-          <span class="points-value">${team.total}</span>
+          <span class="points-value">${equipo.total}</span>
           <span class="points-label">pts</span>
         </div>
         <div class="action-col">
-          <button class="btn-edit-scores" data-team-id="${team.id}">Cargar</button>
+          <button class="btn-edit-scores" data-team-id="${equipo.id}">Cargar</button>
         </div>
       </div>
     `;
   }).join("");
 
-  // Inserción de la estructura de Dashboard Stacked (Podio + Actividades detalladas abajo)
-  main.innerHTML = `
+  // Inserción de la estructura de Dashboard Stacked
+  contenedorPrincipal.innerHTML = `
     <div class="home-container">
-      <!-- Sección Hero con el Reglamento del Evento -->
+      <!-- Sección superior con título principal y reglamento -->
       <section class="hero-section">
         <div class="hero-content">
           <h2>Olimpiadas Liceo Ibérico 2026</h2>
@@ -142,7 +137,7 @@ export const HomeGames = async () => {
         </div>
       </section>
 
-      <!-- SECCIÓN 1: Clasificación General (Ancho completo) -->
+      <!-- SECCIÓN 1: Clasificación General (Leaderboard) -->
       <section class="leaderboard-section">
         <div class="section-header">
           <h3>🏆 Tabla de Clasificación</h3>
@@ -150,11 +145,11 @@ export const HomeGames = async () => {
         </div>
         <p class="section-desc">Selecciona un equipo de la tabla para ver su panel de control o registrar sus puntuaciones.</p>
         <div class="leaderboard-container">
-          ${leaderboardHTML}
+          ${tablaClasificacionHTML}
         </div>
       </section>
 
-      <!-- SECCIÓN 2: Cronograma de Actividades Ampliado (Ancho completo) -->
+      <!-- SECCIÓN 2: Cronograma Detallado de Actividades -->
       <section class="schedule-section expanded-schedule">
         <div class="section-header">
           <h3>📅 Cronograma Detallado de Actividades</h3>
@@ -170,7 +165,7 @@ export const HomeGames = async () => {
           <div class="sch-pane active" id="sch-pane-day1">
             <div class="schedule-grid">
               
-              <!-- Juego 1 -->
+              <!-- Juego 1 - Día 1 -->
               <div class="game-item-card">
                 <div class="game-img-wrapper">
                   <img src="/images/aros.webp" alt="Puntería con la mano" onerror="this.src='https://placehold.co/400x250/111827/FFFFFF?text=Puntería'">
@@ -187,7 +182,7 @@ export const HomeGames = async () => {
                 </div>
               </div>
 
-              <!-- Juego 2 -->
+              <!-- Juego 2 - Día 1 -->
               <div class="game-item-card">
                 <div class="game-img-wrapper">
                   <img src="/images/relevos.webp" alt="Carrera de Relevos" onerror="this.src='https://placehold.co/400x250/111827/FFFFFF?text=Relevos'">
@@ -204,7 +199,7 @@ export const HomeGames = async () => {
                 </div>
               </div>
 
-              <!-- Juego 3 -->
+              <!-- Juego 3 - Día 1 -->
               <div class="game-item-card">
                 <div class="game-img-wrapper">
                   <img src="/images/cubo.webp" alt="Baloncesto con cubos" onerror="this.src='https://placehold.co/400x250/111827/FFFFFF?text=Baloncesto+con+cubos'">
@@ -221,7 +216,7 @@ export const HomeGames = async () => {
                 </div>
               </div>
 
-              <!-- Juego 4 -->
+              <!-- Juego 4 - Día 1 -->
               <div class="game-item-card">
                 <div class="game-img-wrapper">
                   <img src="/images/piesJuntos.webp" alt="Salto de longitud" onerror="this.src='https://placehold.co/400x250/111827/FFFFFF?text=Salto+de+longitud'">
@@ -241,18 +236,18 @@ export const HomeGames = async () => {
             </div>
           </div>
 
-          <!-- Actividades del Día 2 -->
+          <!-- Actividades del Día 2 (Mostrados como Juego 1, 2, 3, 4) -->
           <div class="sch-pane" id="sch-pane-day2">
             <div class="schedule-grid">
               
-              <!-- Juego 5 -->
+              <!-- Juego 1 - Día 2 -->
               <div class="game-item-card">
                 <div class="game-img-wrapper">
                   <img src="/images/pasaAro.webp" alt="Pasa Aros" onerror="this.src='https://placehold.co/400x250/111827/FFFFFF?text=Pasa+Aros'">
                 </div>
                 <div class="game-info">
                   <div class="game-header-row">
-                    <span class="game-number-badge">Juego 5</span>
+                    <span class="game-number-badge">Juego 1</span>
                     <h4>El Pasa Aros</h4>
                   </div>
                   <p class="game-text">Prueba de flexibilidad, velocidad y trabajo en equipo. Todos los integrantes del grupo deben tomarse de las manos formando una cadena humana ininterrumpida. El objetivo es deslizar un aro desde el primer participante hasta el último haciendo pasar todo el cuerpo por dentro del aro, sin soltarse ni romper la cadena en ningún momento.</p>
@@ -262,14 +257,14 @@ export const HomeGames = async () => {
                 </div>
               </div>
 
-              <!-- Juego 6 -->
+              <!-- Juego 2 - Día 2 -->
               <div class="game-item-card">
                 <div class="game-img-wrapper">
                   <img src="/images/pajita.webp" alt="Vaso pajita" onerror="this.src='https://placehold.co/400x250/111827/FFFFFF?text=Vaso+pajita'">
                 </div>
                 <div class="game-info">
                   <div class="game-header-row">
-                    <span class="game-number-badge">Juego 6</span>
+                    <span class="game-number-badge">Juego 2</span>
                     <h4>El vaso y la pajita</h4>
                   </div>
                   <p class="game-text">Una prueba de precisión y soplido/equilibrio por relevos. Cada participante del equipo se coloca una pajita en la boca. Se inicia el recorrido con un vaso de plástico boca abajo insertado en la pajita del primer compañero. Deben pasarse el vaso uno a uno usando únicamente las pajitas, quedando prohibido tocar el vaso con las manos.</p>
@@ -279,14 +274,14 @@ export const HomeGames = async () => {
                 </div>
               </div>
 
-              <!-- Juego 7 -->
+              <!-- Juego 3 - Día 2 -->
               <div class="game-item-card">
                 <div class="game-img-wrapper">
                   <img src="/images/pañuelos.webp" alt="Roba pañuelos" onerror="this.src='https://placehold.co/400x250/111827/FFFFFF?text=Roba+pañuelos'">
                 </div>
                 <div class="game-info">
                   <div class="game-header-row">
-                    <span class="game-number-badge">Juego 7</span>
+                    <span class="game-number-badge">Juego 3</span>
                     <h4>Roba pañuelos</h4>
                   </div>
                   <p class="game-text">Un emocionante juego táctico de agilidad y evasión en zona delimitada. Cada participante se cuelga un pañuelo por detrás del pantalón (debe estar visible y bastante sacado). El objetivo es quitar los pañuelos del equipo rival mientras evitas que te quiten el tuyo. Si te quitan el pañuelo pero tienes otro capturado, puedes colocártelo para seguir jugando.</p>
@@ -296,14 +291,14 @@ export const HomeGames = async () => {
                 </div>
               </div>
 
-              <!-- Juego 8 -->
+              <!-- Juego 4 - Día 2 -->
               <div class="game-item-card">
                 <div class="game-img-wrapper">
                   <img src="/images/robaBalones.webp" alt="Roba Pelotas" onerror="this.src='https://placehold.co/400x250/111827/FFFFFF?text=Roba+Pelotas'">
                 </div>
                 <div class="game-info">
                   <div class="game-header-row">
-                    <span class="game-number-badge">Juego 8</span>
+                    <span class="game-number-badge">Juego 4</span>
                     <h4>Roba Pelotas</h4>
                   </div>
                   <p class="game-text">Duelo rápido de estrategia. Cada equipo cuenta con un aro que contiene pelotas de tenis en su interior. El juego consiste en correr y llevar las pelotas dentro del aro del equipo contrario sin que se salgan. Reglas estrictas: solo se permite transportar una sola pelota a la vez y no se permite empujar a los rivales.</p>
@@ -320,38 +315,38 @@ export const HomeGames = async () => {
     </div>
   `;
 
-  // Controladores de pestañas en la sección del Cronograma
-  const schTabs = main.querySelectorAll(".sch-tab-btn");
-  const schPanes = main.querySelectorAll(".sch-pane");
+  // Controladores de eventos para cambiar entre las pestañas del cronograma
+  const botonesPestañasCronograma = contenedorPrincipal.querySelectorAll(".sch-tab-btn");
+  const panelesCronograma = contenedorPrincipal.querySelectorAll(".sch-pane");
   
-  schTabs.forEach(tab => {
-    tab.addEventListener("click", () => {
-      schTabs.forEach(t => t.classList.remove("active"));
-      schPanes.forEach(p => p.classList.remove("active"));
+  botonesPestañasCronograma.forEach(pestaña => {
+    pestaña.addEventListener("click", () => {
+      botonesPestañasCronograma.forEach(t => t.classList.remove("active"));
+      panelesCronograma.forEach(p => p.classList.remove("active"));
       
-      tab.classList.add("active");
-      const activePane = main.querySelector(`#sch-pane-${tab.dataset.day}`);
-      if (activePane) activePane.classList.add("active");
+      pestaña.classList.add("active");
+      const panelActivo = contenedorPrincipal.querySelector(`#sch-pane-${pestaña.dataset.day}`);
+      if (panelActivo) panelActivo.classList.add("active");
     });
   });
 
-  // Enlazar clics en las filas de la clasificación y botones de edición
-  const leaderboardRows = main.querySelectorAll(".leaderboard-row");
-  leaderboardRows.forEach(row => {
-    const teamId = row.dataset.teamId;
-    row.addEventListener("click", (e) => {
-      if (e.target.tagName !== "BUTTON") {
-        Team(teamId);
+  // Vincular eventos de clics a las filas del Leaderboard y botones de carga
+  const filasLeaderboard = contenedorPrincipal.querySelectorAll(".leaderboard-row");
+  filasLeaderboard.forEach(fila => {
+    const idEquipo = fila.dataset.teamId;
+    fila.addEventListener("click", (evento) => {
+      if (evento.target.tagName !== "BUTTON") {
+        Team(idEquipo);
       }
     });
   });
 
-  const editBtns = main.querySelectorAll(".btn-edit-scores");
-  editBtns.forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const teamId = btn.dataset.teamId;
-      Team(teamId);
+  const botonesCarga = contenedorPrincipal.querySelectorAll(".btn-edit-scores");
+  botonesCarga.forEach(boton => {
+    boton.addEventListener("click", (evento) => {
+      evento.stopPropagation();
+      const idEquipo = boton.dataset.teamId;
+      Team(idEquipo);
     });
   });
 };
