@@ -7,26 +7,26 @@
   --text-primary: hsl(210, 40%, 98%);
   --text-secondary: hsl(215, 20%, 75%);
   --text-muted: hsl(215, 15%, 55%);
-  
+
   --primary: hsl(230, 85%, 65%);
   --primary-glow: hsla(230, 85%, 65%, 0.15);
   --primary-hover: hsl(230, 85%, 70%);
-  
+
   --accent: hsl(42, 100%, 55%);
   --accent-glow: hsla(42, 100%, 55%, 0.2);
   --accent-hover: hsl(42, 100%, 60%);
-  
+
   --success: hsl(142, 70%, 50%);
   --success-glow: hsla(142, 70%, 50%, 0.15);
   --warning: hsl(38, 92%, 50%);
   --danger: hsl(350, 80%, 55%);
-  
+
   /* Glassmorphism System */
   --glass-bg: rgba(15, 23, 42, 0.45);
   --glass-border: rgba(255, 255, 255, 0.08);
   --glass-border-hover: rgba(255, 255, 255, 0.16);
   --glass-shadow: rgba(0, 0, 0, 0.3);
-  
+
   /* Layout Options */
   --radius-sm: 8px;
   --radius-md: 16px;
@@ -44,7 +44,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* scroll-behavior: smooth; */
   font-size: 16px;
 }
 
@@ -52,16 +52,16 @@ body {
   background: radial-gradient(circle at 50% 0%, hsl(224, 45%, 12%) 0%, var(--bg-gradient-start) 60%), var(--bg-gradient-end);
   color: var(--text-primary);
   font-family: var(--font-body);
-  line-height: 1.6;
+  /* line-height: 1.6;
   min-height: 100vh;
   overflow-x: hidden;
-  position: relative;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  position: relative; */
+  /* -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; */
 }
 
 /* Background elements for visual richness */
-body::before {
+/* body::before {
   content: '';
   position: absolute;
   top: -10%;
@@ -85,7 +85,7 @@ body::after {
   z-index: -1;
   pointer-events: none;
   filter: blur(50px);
-}
+} */
 
 /* Links and Lists */
 a {
@@ -98,7 +98,12 @@ li {
   list-style: none;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-display);
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -107,7 +112,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Base Main Layout Container */
 main {
-  max-width: 1200px;
+  /* max-width: 1200px; */
   margin: 0 auto;
   padding: 8rem 2rem 4rem 2rem;
   min-height: 90vh;
@@ -139,6 +144,7 @@ main {
     opacity: 0;
     transform: translateY(15px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -146,13 +152,23 @@ main {
 }
 
 @keyframes pulse-success {
-  0% { box-shadow: 0 0 0 0 hsla(142, 70%, 50%, 0.4); }
-  70% { box-shadow: 0 0 0 8px hsla(142, 70%, 50%, 0); }
-  100% { box-shadow: 0 0 0 0 hsla(142, 70%, 50%, 0); }
+  0% {
+    box-shadow: 0 0 0 0 hsla(142, 70%, 50%, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 8px hsla(142, 70%, 50%, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 hsla(142, 70%, 50%, 0);
+  }
 }
 
 @keyframes spinner {
-  to {transform: rotate(360deg);}
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Global Toast Notification Styles */
@@ -172,7 +188,7 @@ main {
   border-left: 4px solid var(--primary);
   border-radius: var(--radius-sm);
   padding: 1rem 1.5rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   color: var(--text-primary);
   font-weight: 500;
   display: flex;
@@ -182,14 +198,20 @@ main {
   max-width: 350px;
 }
 
-.toast.success { border-left-color: var(--success); }
-.toast.error { border-left-color: var(--danger); }
+.toast.success {
+  border-left-color: var(--success);
+}
+
+.toast.error {
+  border-left-color: var(--danger);
+}
 
 @keyframes slideInRight {
   from {
     transform: translateX(100%);
     opacity: 0;
   }
+
   to {
     transform: translateX(0);
     opacity: 1;
@@ -201,7 +223,8 @@ main {
   html {
     font-size: 15px;
   }
-  main {
+
+  /* main {
     padding: 7rem 1rem 3rem 1rem;
-  }
+  } */
 }
