@@ -305,9 +305,20 @@
 }
 
 @keyframes pulse-dot-anim {
-  0% { transform: scale(0.8); opacity: 0.5; }
-  50% { transform: scale(1.2); opacity: 1; }
-  100% { transform: scale(0.8); opacity: 0.5; }
+  0% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
 }
 
 /* Lista vertical contenedora de las filas de equipos */
@@ -475,8 +486,14 @@
   background: hsla(42, 100%, 55%, 0.04);
   border-color: hsla(42, 100%, 55%, 0.2);
 }
-.leaderboard-row.rank-1 .team-name { color: var(--accent-hover); }
-.leaderboard-row.rank-1 .progress-bar-fill { background: linear-gradient(90deg, var(--accent), #eab308); }
+
+.leaderboard-row.rank-1 .team-name {
+  color: var(--accent-hover);
+}
+
+.leaderboard-row.rank-1 .progress-bar-fill {
+  background: linear-gradient(90deg, var(--accent), #eab308);
+}
 
 .leaderboard-row.rank-2 {
   background: rgba(255, 255, 255, 0.04);
@@ -487,7 +504,10 @@
   background: hsla(28, 48%, 48%, 0.04);
   border-color: hsla(28, 48%, 48%, 0.2);
 }
-.leaderboard-row.rank-3 .team-name { color: #d97706; }
+
+.leaderboard-row.rank-3 .team-name {
+  color: #d97706;
+}
 
 /* ==========================================================================
    SECCIÓN 2: CRONOGRAMA DE ACTIVIDADES (PROMINENTE / DETALLADO)
@@ -666,9 +686,11 @@
   .hero-section {
     grid-template-columns: 1fr;
   }
+
   .staff-grid {
     grid-template-columns: 1fr;
   }
+
   .game-img-wrapper {
     width: 250px;
     min-width: 250px;
@@ -679,14 +701,17 @@
   .schedule-section.expanded-schedule {
     padding: 1.5rem;
   }
+
   .game-item-card {
     flex-direction: column;
   }
+
   .game-img-wrapper {
     width: 100%;
     height: 180px;
     min-width: 100%;
   }
+
   .game-info {
     padding: 1.25rem 1.5rem;
   }
@@ -698,37 +723,66 @@
     gap: 0.5rem 1rem;
     padding: 1rem;
   }
+
   .progress-col {
     width: 100%;
     order: 4;
     margin-top: 0.5rem;
   }
+
   .points-col {
     order: 2;
     flex: 1;
   }
+
   .action-col {
     order: 3;
     width: auto;
   }
+
   .guides-grid {
     grid-template-columns: 1fr;
   }
 }
 
 @media screen and (max-width: 480px) {
+  .hero-content {
+    text-align: center;
+    align-items: center;
+  }
   .hero-content h2 {
     font-size: 1.8rem;
   }
-  .hero-content, .rules-card {
+  .hero-content,
+  .rules-card {
     padding: 1.5rem;
+  }
+  .section-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.75rem;
+  }
+  .section-desc {
+    text-align: center;
   }
   .section-header h3 {
     font-size: 1.3rem;
   }
-  .staff-tab-btn, .sch-tab-btn {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.85rem;
+  .staff-tabs,
+  .schedule-tabs {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+  }
+  .staff-tab-btn,
+  .sch-tab-btn {
+    flex: 1;
+    padding: 0.4rem 0.5rem;
+    font-size: 0.8rem;
+    text-align: center;
   }
   .leaderboard-row {
     padding: 0.75rem;
@@ -767,16 +821,13 @@
 
 @media screen and (max-width: 380px) {
   .hero-content h2 {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
   }
-  .staff-tabs, .schedule-tabs {
-    width: 100%;
-    justify-content: space-between;
+  .hero-content,
+  .rules-card {
+    padding: 1.25rem;
   }
-  .staff-tab-btn, .sch-tab-btn {
-    flex: 1;
-    padding: 0.35rem 0.5rem;
-    font-size: 0.8rem;
-    text-align: center;
+  .leaderboard-row {
+    padding: 0.6rem;
   }
 }
