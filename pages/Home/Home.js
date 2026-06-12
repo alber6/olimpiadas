@@ -137,6 +137,138 @@ export const HomeGames = async () => {
         </div>
       </section>
 
+      <!-- NUEVA SECCIÓN: Distribución del Profesorado (Lunes 15 / Martes 16) -->
+      <section class="staff-section">
+        <div class="section-header">
+          <h3>👥 Organización de Profesores</h3>
+          <div class="staff-tabs">
+            <button class="staff-tab-btn active" data-staff-day="day1">Lunes 15</button>
+            <button class="staff-tab-btn" data-staff-day="day2">Martes 16</button>
+          </div>
+        </div>
+        <p class="section-desc">Consulta los profesores responsables de las estaciones de juego y los guías asignados a cada equipo.</p>
+        
+        <div class="staff-panes">
+          <!-- Distribución del Lunes 15 -->
+          <div class="staff-pane active" id="staff-pane-day1">
+            <div class="staff-grid">
+              
+              <!-- Estaciones Lunes -->
+              <div class="staff-card">
+                <h4>Estaciones de Juego (Lunes 15)</h4>
+                <p class="staff-subtitle">Profesores a cargo de explicar y controlar la puntuación:</p>
+                <ul class="staff-list">
+                  <li>
+                    <span class="badge-juego">Juego 1</span>
+                    <div class="staff-details">
+                      <strong>Puntería con la mano:</strong>
+                      <span>Maria y Esther</span>
+                    </div>
+                  </li>
+                  <li>
+                    <span class="badge-juego">Juego 2</span>
+                    <div class="staff-details">
+                      <strong>Relevos:</strong>
+                      <span>Gabriel y Raquel</span>
+                    </div>
+                  </li>
+                  <li>
+                    <span class="badge-juego">Juego 3</span>
+                    <div class="staff-details">
+                      <strong>Baloncesto con cubos:</strong>
+                      <span>Teresa y Alba</span>
+                    </div>
+                  </li>
+                  <li>
+                    <span class="badge-juego">Juego 4</span>
+                    <div class="staff-details">
+                      <strong>Saltos con pies juntos:</strong>
+                      <span>Julián y Ana</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Acompañantes Lunes -->
+              <div class="staff-card">
+                <h4>Acompañantes de Grupo (Lunes 15)</h4>
+                <p class="staff-subtitle">Profesores tutores que guían a cada equipo en su circuito:</p>
+                <div class="guides-grid">
+                  <div class="guide-item"><strong>Equipo 1:</strong> <span>Silvia</span></div>
+                  <div class="guide-item"><strong>Equipo 2:</strong> <span>Laura</span></div>
+                  <div class="guide-item"><strong>Equipo 3:</strong> <span>Luis</span></div>
+                  <div class="guide-item"><strong>Equipo 4:</strong> <span>Mario</span></div>
+                  <div class="guide-item"><strong>Equipo 5:</strong> <span>Javier</span></div>
+                  <div class="guide-item"><strong>Equipo 6:</strong> <span>Miguel Ángel</span></div>
+                  <div class="guide-item"><strong>Equipo 7:</strong> <span>Gloria</span></div>
+                  <div class="guide-item"><strong>Equipo 8:</strong> <span>Luis Carlos</span></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Distribución del Martes 16 -->
+          <div class="staff-pane" id="staff-pane-day2">
+            <div class="staff-grid">
+              
+              <!-- Estaciones Martes -->
+              <div class="staff-card">
+                <h4>Estaciones de Juego (Martes 16)</h4>
+                <p class="staff-subtitle">Profesores a cargo de explicar y controlar la puntuación:</p>
+                <ul class="staff-list">
+                  <li>
+                    <span class="badge-juego">Juego 1</span>
+                    <div class="staff-details">
+                      <strong>Pasa aros:</strong>
+                      <span>Luis y Antonio</span>
+                    </div>
+                  </li>
+                  <li>
+                    <span class="badge-juego">Juego 2</span>
+                    <div class="staff-details">
+                      <strong>Vaso pajita:</strong>
+                      <span>Silvia y Laura</span>
+                    </div>
+                  </li>
+                  <li>
+                    <span class="badge-juego">Juego 3</span>
+                    <div class="staff-details">
+                      <strong>Pañuelos colas:</strong>
+                      <span>Javier y Miguel Ángel</span>
+                    </div>
+                  </li>
+                  <li>
+                    <span class="badge-juego">Juego 4</span>
+                    <div class="staff-details">
+                      <strong>Roba balones:</strong>
+                      <span>Mario y Gloria</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Acompañantes Martes -->
+              <div class="staff-card">
+                <h4>Acompañantes de Grupo (Martes 16)</h4>
+                <p class="staff-subtitle">Profesores tutores que guían a cada equipo en su circuito:</p>
+                <div class="guides-grid">
+                  <div class="guide-item"><strong>Equipo 1:</strong> <span>Gabriel</span></div>
+                  <div class="guide-item"><strong>Equipo 2:</strong> <span>Raquel</span></div>
+                  <div class="guide-item"><strong>Equipo 3:</strong> <span>Luis Carlos</span></div>
+                  <div class="guide-item"><strong>Equipo 4:</strong> <span>Esther</span></div>
+                  <div class="guide-item"><strong>Equipo 5:</strong> <span>Julián</span></div>
+                  <div class="guide-item"><strong>Equipo 6:</strong> <span>Ana</span></div>
+                  <div class="guide-item"><strong>Equipo 7:</strong> <span>Teresa</span></div>
+                  <div class="guide-item"><strong>Equipo 8:</strong> <span>Alba</span></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- SECCIÓN 1: Clasificación General (Leaderboard) -->
       <section class="leaderboard-section">
         <div class="section-header">
@@ -326,6 +458,21 @@ export const HomeGames = async () => {
       
       pestaña.classList.add("active");
       const panelActivo = contenedorPrincipal.querySelector(`#sch-pane-${pestaña.dataset.day}`);
+      if (panelActivo) panelActivo.classList.add("active");
+    });
+  });
+
+  // Controladores de eventos para cambiar entre las pestañas de profesores (Staff)
+  const botonesPestañasStaff = contenedorPrincipal.querySelectorAll(".staff-tab-btn");
+  const panelesStaff = contenedorPrincipal.querySelectorAll(".staff-pane");
+  
+  botonesPestañasStaff.forEach(pestaña => {
+    pestaña.addEventListener("click", () => {
+      botonesPestañasStaff.forEach(t => t.classList.remove("active"));
+      panelesStaff.forEach(p => p.classList.remove("active"));
+      
+      pestaña.classList.add("active");
+      const panelActivo = contenedorPrincipal.querySelector(`#staff-pane-${pestaña.dataset.staffDay}`);
       if (panelActivo) panelActivo.classList.add("active");
     });
   });

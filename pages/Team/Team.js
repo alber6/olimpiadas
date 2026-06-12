@@ -28,6 +28,30 @@ const ORDEN_JUEGOS_DIA2 = {
   8: [8, 7, 5, 6]
 };
 
+// Profesores que acompañan a cada grupo el Lunes 15 (Día 1)
+const ACOMPAÑANTES_LUNES = {
+  1: "Silvia",
+  2: "Laura",
+  3: "Luis",
+  4: "Mario",
+  5: "Javier",
+  6: "Miguel Ángel",
+  7: "Gloria",
+  8: "Luis Carlos"
+};
+
+// Profesores que acompañan a cada grupo el Martes 16 (Día 2)
+const ACOMPAÑANTES_MARTES = {
+  1: "Gabriel",
+  2: "Raquel",
+  3: "Luis Carlos",
+  4: "Esther",
+  5: "Julián",
+  6: "Ana",
+  7: "Teresa",
+  8: "Alba"
+};
+
 // Información detallada de todos los juegos del evento (Juegos del 1 al 8)
 const DETALLES_DE_JUEGOS = {
   1: { nombre: "Puntería con la mano", descripcion: "Lanzamientos con pelotas hacia aros a diferentes distancias. 1 pto (cerca), 2 ptos (media), 3 ptos (lejos)." },
@@ -136,7 +160,7 @@ export const Team = async (idEquipo) => {
           <div class="team-avatar">E${idEquipo}</div>
           <div class="team-title-section">
             <h2>Equipo ${idEquipo}</h2>
-            <p>Panel de Control y Carga de Puntos</p>
+            <p id="team-teacher-assign">Guía Acompañante: ${ACOMPAÑANTES_LUNES[idEquipo]}</p>
           </div>
         </div>
         <div class="team-stats">
@@ -201,13 +225,16 @@ export const Team = async (idEquipo) => {
       
       const cabeceraTimeline = contenedorPrincipal.querySelector("#timeline-heading");
       const pasosTimeline = contenedorPrincipal.querySelector("#timeline-steps");
+      const tutorAsignado = contenedorPrincipal.querySelector("#team-teacher-assign");
       
       if (boton.dataset.tab === "dia1") {
         cabeceraTimeline.textContent = "Orden de Pruebas (Día 1)";
         pasosTimeline.innerHTML = generarLineaTiempoHTML(1, idEquipo);
+        tutorAsignado.textContent = `Guía Acompañante: ${ACOMPAÑANTES_LUNES[idEquipo]}`;
       } else {
         cabeceraTimeline.textContent = "Orden de Pruebas (Día 2)";
         pasosTimeline.innerHTML = generarLineaTiempoHTML(2, idEquipo);
+        tutorAsignado.textContent = `Guía Acompañante: ${ACOMPAÑANTES_MARTES[idEquipo]}`;
       }
     });
   });
