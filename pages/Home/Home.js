@@ -59,7 +59,6 @@ export const HomeGames = async () => {
             <section>
                 <h1>Juego 1</h1>
                 <img src="public/images/aros.webp" />
-                <img src="public/images/aros.webp" />
                 <p>PUNTERÍA CON LA MANO -- Lanzamientos con pelotas o pesos sobre aros o aros sobre conos. Se colocará a varias distancias, dependiendo de los cursos. Alumno por alumno (suma de puntos, cada posición puede valer 1, 2 o 3 puntos). <span>Material: 6 aros, 6 conos, 2 pelotas de gomaespuma o 2 pelotas de tenis.</span> </p>
             </section>
             <section>
