@@ -28,7 +28,7 @@ const ORDEN_JUEGOS_DIA2 = {
   8: [8, 7, 5, 6]
 };
 
-// Información detallada de todos los juegos del evento
+// Información detallada de todos los juegos del evento (Juegos del 1 al 8)
 const DETALLES_DE_JUEGOS = {
   1: { nombre: "Puntería con la mano", descripcion: "Lanzamientos con pelotas hacia aros a diferentes distancias. 1 pto (cerca), 2 ptos (media), 3 ptos (lejos)." },
   2: { nombre: "Relevos", descripcion: "Carrera clásica pasando el testigo. Realizado 3 veces. El ganador de cada ronda consigue 5 puntos." },
@@ -37,9 +37,7 @@ const DETALLES_DE_JUEGOS = {
   5: { nombre: "Pasa aros", descripcion: "El grupo cogido de la mano debe pasar el aro por todos sin soltarse. 5 puntos para el ganador (3 rondas)." },
   6: { nombre: "Vaso pajita", descripcion: "Pasar un vaso boca abajo con pajita en la boca sin manos. 10 ptos por completarlo, 5 ptos a la mitad." },
   7: { nombre: "Pañuelos", descripcion: "Quitar pañuelos al rival sin perder el propio. 5 puntos por eliminar a todos los rivales (3 rondas)." },
-  8: { nombre: "Roba pelotas", descripcion: "Llevar pelotas de una en una al aro rival. 3 rondas, cada victoria otorga 5 puntos." },
-  9: { nombre: "Juego Extra 1", descripcion: "Juego de puntuación adicional según las directrices de los organizadores." },
-  10: { nombre: "Juego Extra 2", descripcion: "Juego de puntuación adicional según las directrices de los organizadores." }
+  8: { nombre: "Roba pelotas", descripcion: "Llevar pelotas de una en una al aro rival. 3 rondas, cada victoria otorga 5 puntos." }
 };
 
 // Muestra una notificación flotante de éxito o error en la pantalla
@@ -71,20 +69,15 @@ function generarLineaTiempoHTML(diaNumero, idEquipo) {
   let listaJuegos = [];
   if (diaNumero === 1) {
     listaJuegos = ORDEN_JUEGOS_DIA1[idEquipo] || [1, 2, 3, 4];
-  } else if (diaNumero === 2) {
-    listaJuegos = ORDEN_JUEGOS_DIA2[idEquipo] || [5, 6, 7, 8];
   } else {
-    listaJuegos = [9, 10]; // Juegos Extra
+    listaJuegos = ORDEN_JUEGOS_DIA2[idEquipo] || [5, 6, 7, 8];
   }
 
   return listaJuegos.map((numeroJuego, indicePaso) => {
     // Para el Día 2 (juegos 5-8), restamos 4 para mostrar "Juego 1, 2, 3, 4" en la interfaz
-    // Para Extras (juegos 9-10), restamos 8 para mostrar "Juego 1, 2"
     let numeroParaMostrar = numeroJuego;
     if (numeroJuego >= 5 && numeroJuego <= 8) {
       numeroParaMostrar = numeroJuego - 4;
-    } else if (numeroJuego >= 9) {
-      numeroParaMostrar = numeroJuego - 8;
     }
 
     return `
@@ -110,8 +103,8 @@ export const Team = async (idEquipo) => {
     </div>
   `;
 
-  // Array para guardar las puntuaciones (10 juegos, inician como null)
-  const puntosDeJuegos = Array(10).fill(null);
+  // Array para guardar las puntuaciones (8 juegos, inician como null)
+  const puntosDeJuegos = Array(8).fill(null);
   
   try {
     const referenciaColeccion = collection(db, "resultados");
@@ -121,7 +114,7 @@ export const Team = async (idEquipo) => {
     documentosObtenidos.forEach(documento => {
       const datos = documento.data();
       const numeroDeJuego = datos.juegoNumero;
-      if (typeof numeroDeJuego === "number" && numeroDeJuego >= 1 && numeroDeJuego <= 10) {
+      if (typeof numeroDeJuego === "number" && numeroDeJuego >= 1 && numeroDeJuego <= 8) {
         puntosDeJuegos[numeroDeJuego - 1] = datos.puntos;
       }
     });
@@ -152,7 +145,7 @@ export const Team = async (idEquipo) => {
             <span class="stat-label">Puntos Totales</span>
           </div>
           <div class="stat-box">
-            <span class="stat-value" id="team-completed-games">${juegosRegistrados}/10</span>
+            <span class="stat-value" id="team-completed-games">${juegosRegistrados}/8</span>
             <span class="stat-label">Juegos Registrados</span>
           </div>
         </div>
@@ -171,7 +164,6 @@ export const Team = async (idEquipo) => {
         <div class="tabs-buttons">
           <button class="tab-btn active" data-tab="dia1">Día 1 (Lunes 15)</button>
           <button class="tab-btn" data-tab="dia2">Día 2 (Martes 16)</button>
-          <button class="tab-btn" data-tab="extras">Juegos Extra</button>
         </div>
 
         <!-- Contenedores con el listado de tarjetas por día -->
@@ -187,13 +179,6 @@ export const Team = async (idEquipo) => {
           <div class="tab-pane" id="pane-dia2">
             <div class="games-grid">
               ${generarTarjetasJuegoHTML(5, 8, puntosDeJuegos)}
-            </div>
-          </div>
-
-          <!-- Tarjetas de Juegos Extras (Juegos 9 y 10) -->
-          <div class="tab-pane" id="pane-extras">
-            <div class="games-grid">
-              ${generarTarjetasJuegoHTML(9, 10, puntosDeJuegos)}
             </div>
           </div>
         </div>
@@ -220,18 +205,15 @@ export const Team = async (idEquipo) => {
       if (boton.dataset.tab === "dia1") {
         cabeceraTimeline.textContent = "Orden de Pruebas (Día 1)";
         pasosTimeline.innerHTML = generarLineaTiempoHTML(1, idEquipo);
-      } else if (boton.dataset.tab === "dia2") {
+      } else {
         cabeceraTimeline.textContent = "Orden de Pruebas (Día 2)";
         pasosTimeline.innerHTML = generarLineaTiempoHTML(2, idEquipo);
-      } else {
-        cabeceraTimeline.textContent = "Juegos Extra";
-        pasosTimeline.innerHTML = generarLineaTiempoHTML(3, idEquipo);
       }
     });
   });
 
-  // Vincular eventos de incrementar, decrementar y guardar para cada uno de los 10 juegos
-  for (let num = 1; num <= 10; num++) {
+  // Vincular eventos de incrementar, decrementar y guardar para cada uno de los 8 juegos
+  for (let num = 1; num <= 8; num++) {
     const selectorInput = contenedorPrincipal.querySelector(`#score-input-${num}`);
     const botonRestar = contenedorPrincipal.querySelector(`#btn-less-${num}`);
     const botonSumar = contenedorPrincipal.querySelector(`#btn-more-${num}`);
@@ -286,7 +268,7 @@ export const Team = async (idEquipo) => {
           juego: `Juego ${num}`,
           juegoNumero: num,
           puntos: valorAGuardar,
-          dia: num <= 4 ? "Día 1" : num <= 8 ? "Día 2" : "Extra",
+          dia: num <= 4 ? "Día 1" : "Día 2",
           fecha: new Date()
         });
 
@@ -306,11 +288,11 @@ export const Team = async (idEquipo) => {
         const nuevoTotal = puntosDeJuegos.reduce((acumulado, valor) => acumulado + (valor || 0), 0);
         const nuevosCompletados = puntosDeJuegos.filter(valor => valor !== null).length;
         contenedorPrincipal.querySelector("#team-total-points").textContent = nuevoTotal;
-        contenedorPrincipal.querySelector("#team-completed-games").textContent = `${nuevosCompletados}/10`;
+        contenedorPrincipal.querySelector("#team-completed-games").textContent = `${nuevosCompletados}/8`;
 
-        // Calcular número para mostrar en la alerta ("Juego 1, 2, 3 o 4")
-        const numeroParaMostrar = num <= 4 ? num : (num <= 8 ? num - 4 : num - 8);
-        const etiquetaDia = num <= 4 ? "Día 1" : num <= 8 ? "Día 2" : "Extra";
+        // Calcular número para mostrar en la interfaz ("Juego 1, 2, 3 o 4")
+        const numeroParaMostrar = num <= 4 ? num : num - 4;
+        const etiquetaDia = num <= 4 ? "Día 1" : "Día 2";
         mostrarAlertaFlotante(`¡Juego ${numeroParaMostrar} (${etiquetaDia}) guardado con ${valorAGuardar} puntos!`, "exito");
       } catch (error) {
         console.error("Error al guardar puntuación en Firebase:", error);
@@ -338,20 +320,15 @@ function generarTarjetasJuegoHTML(rangoInicio, rangoFin, puntosDeJuegos) {
     const tienePuntos = puntuacionGuardada !== null;
     
     // Si es del Día 2 (juegos 5-8), mostramos en la tarjeta "JUEGO 1, 2, 3, 4"
-    // Si es Extra (juegos 9-10), mostramos "JUEGO 1 EXTRA, 2 EXTRA"
     let numeroParaMostrar = num;
-    let etiquetaExtra = "";
     if (num >= 5 && num <= 8) {
       numeroParaMostrar = num - 4;
-    } else if (num >= 9) {
-      numeroParaMostrar = num - 8;
-      etiquetaExtra = " EXTRA";
     }
     
     codigoHTML += `
       <div class="game-card" id="game-card-${num}">
         <div class="game-card-header">
-          <span class="game-number">JUEGO ${numeroParaMostrar}${etiquetaExtra}</span>
+          <span class="game-number">JUEGO ${numeroParaMostrar}</span>
           <span class="saved-points-badge ${tienePuntos ? '' : 'empty'}" id="saved-badge-${num}">
             ${tienePuntos ? puntuacionGuardada + ' pts' : 'Sin registrar'}
           </span>

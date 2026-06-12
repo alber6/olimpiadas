@@ -4,9 +4,9 @@ import { db } from "../../firebase-config.js";
 import { collection, query, where, getDocs } from "../../firebase-config.js";
 import { Team } from "../Team/Team";
 
-// Obtiene las puntuaciones de la base de datos para un equipo específico
+// Obtiene las puntuaciones de la base de datos para un equipo específico (Juegos del 1 al 8)
 export async function getGameScores(nombreDelEquipo) {
-  const listadoDePuntos = Array(10).fill(0); 
+  const listadoDePuntos = Array(8).fill(0); 
   const referenciaResultados = collection(db, "resultados");
   const consultaEquipos = query(referenciaResultados, where("equipo", "==", nombreDelEquipo));
   
@@ -15,7 +15,7 @@ export async function getGameScores(nombreDelEquipo) {
     documentosObtenidos.forEach(documento => {
       const datos = documento.data();
       const numeroDeJuego = datos.juegoNumero;
-      if (typeof numeroDeJuego === "number" && numeroDeJuego >= 1 && numeroDeJuego <= 10) {
+      if (typeof numeroDeJuego === "number" && numeroDeJuego >= 1 && numeroDeJuego <= 8) {
         listadoDePuntos[numeroDeJuego - 1] = datos.puntos || 0;
       }
     });
@@ -80,7 +80,7 @@ export const HomeGames = async () => {
     const puntuacionMaxima = Math.max(...listaEquipos.map(eq => eq.total), 1);
     const porcentajeProgreso = Math.min(100, Math.round((equipo.total / puntuacionMaxima) * 100));
 
-    // Generar pequeñas esferas indicativas de puntos por juego
+    // Generar pequeñas esferas indicativas de puntos por juego (8 esferas ahora)
     const esferasPuntuacionHTML = equipo.scores.map((puntosJuego, indiceJuego) => `
       <span class="score-badge-mini ${puntosJuego > 0 ? 'active' : ''}" title="Juego ${indiceJuego + 1}: ${puntosJuego} pts">
         ${puntosJuego}
@@ -92,7 +92,7 @@ export const HomeGames = async () => {
         <div class="rank-col">${medallaOEspecificacion}</div>
         <div class="team-col">
           <span class="team-name">Equipo ${equipo.id}</span>
-          <span class="team-details">Juegos registrados: ${equipo.completed}/10</span>
+          <span class="team-details">Juegos registrados: ${equipo.completed}/8</span>
         </div>
         <div class="progress-col">
           <div class="progress-bar-bg">
