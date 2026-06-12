@@ -6,10 +6,10 @@ import { Team } from "../Team/Team";
 
 // Obtiene las puntuaciones de la base de datos para un equipo específico (Juegos del 1 al 8)
 export async function getGameScores(nombreDelEquipo) {
-  const listadoDePuntos = Array(8).fill(0); 
+  const listadoDePuntos = Array(8).fill(0);
   const referenciaResultados = collection(db, "resultados");
   const consultaEquipos = query(referenciaResultados, where("equipo", "==", nombreDelEquipo));
-  
+
   try {
     const documentosObtenidos = await getDocs(consultaEquipos);
     documentosObtenidos.forEach(documento => {
@@ -49,7 +49,7 @@ export const HomeGames = async () => {
         listaEquipos.push({ id: idEquipo, scores: puntos, total: puntuacionTotal, completed: juegosConPuntos });
       });
     });
-    
+
     await Promise.all(listadoPromesas);
   } catch (error) {
     console.error("Error al cargar la información de los equipos:", error);
@@ -62,7 +62,7 @@ export const HomeGames = async () => {
   const tablaClasificacionHTML = listaEquipos.map((equipo, indiceClasificacion) => {
     let medallaOEspecificacion = "";
     let claseDeFila = "";
-    
+
     if (indiceClasificacion === 0) {
       medallaOEspecificacion = "🥇";
       claseDeFila = "rank-1";
@@ -131,7 +131,7 @@ export const HomeGames = async () => {
             </div>
             <div class="rule-item">
               <span class="rule-icon">🛠️</span>
-              <p><strong>Materiales asignados:</strong> 8 aros, pelotas de tenis, testigo de relevos, conos, 2 cubos, pelotas blandas, pañuelos, vasos, pajitas y globos de agua.</p>
+              <p><strong>Materiales asignados:</strong> 10 aros, pelotas de tenis, testigo de relevos, conos, 2 cubos, pelotas blandas, pañuelos, vasos, pajitas y globos de agua.</p>
             </div>
           </div>
         </div>
@@ -156,7 +156,7 @@ export const HomeGames = async () => {
               <!-- Estaciones Lunes -->
               <div class="staff-card">
                 <h4>Estaciones de Juego (Lunes 15)</h4>
-                <p class="staff-subtitle">Profesores a cargo de explicar y controlar la puntuación:</p>
+                <p class="staff-subtitle">Profesores a cargo de explicar el juego:</p>
                 <ul class="staff-list">
                   <li>
                     <span class="badge-juego">Juego 1</span>
@@ -192,7 +192,7 @@ export const HomeGames = async () => {
               <!-- Acompañantes Lunes -->
               <div class="staff-card">
                 <h4>Acompañantes de Grupo (Lunes 15)</h4>
-                <p class="staff-subtitle">Profesores tutores que guían a cada equipo en su circuito:</p>
+                <p class="staff-subtitle">Profesores tutores que guían a cada equipo en su circuito y controlar la puntuación:</p>
                 <div class="guides-grid">
                   <div class="guide-item"><strong>Equipo 1:</strong> <span>Silvia</span></div>
                   <div class="guide-item"><strong>Equipo 2:</strong> <span>Laura</span></div>
@@ -307,9 +307,12 @@ export const HomeGames = async () => {
                     <span class="game-number-badge">Juego 1</span>
                     <h4>Puntería con la mano</h4>
                   </div>
-                  <p class="game-text">Consiste en poner a prueba la destreza y precisión del alumnado. Se colocarán 8 aros en el suelo a diferentes distancias de la línea de tiro. Cada participante del equipo dispondrá de lanzamientos individuales por turnos. El total de puntos acumulados por todos los alumnos se sumará al marcador final del equipo.</p>
+                  <p class="game-text">Se colocarán 8 aros sobre los conos que queden sujetados horizontalmente y en diferentes 
+                  distancias de la línea de tiro. Cada participante del equipo dispondrá de lanzamientos individuales por turnos. El total 
+                  de puntos acumulados por todos los alumnos se sumará al marcador final del equipo.</p>
                   <div class="game-scoring-rule">
-                    <strong>Sistema de Puntos:</strong> La posición cercana otorga <strong>1 punto</strong>, la posición media otorga <strong>2 puntos</strong> y la posición lejana otorga <strong>3 puntos</strong>.
+                    <strong>Sistema de Puntos:</strong> La posición cercana otorga <strong>1 punto</strong>, 
+                    la posición media otorga <strong>2 puntos</strong> y la posición lejana otorga <strong>3 puntos</strong>.
                   </div>
                 </div>
               </div>
@@ -324,9 +327,12 @@ export const HomeGames = async () => {
                     <span class="game-number-badge">Juego 2</span>
                     <h4>Carrera de Relevos</h4>
                   </div>
-                  <p class="game-text">Una prueba de velocidad y coordinación en equipo. Cada grupo se alineará en la línea de salida (se recomienda ordenar a los participantes por niveles académicos similares para equilibrar la competencia). Cada corredor debe sprintar hasta el cono de retorno y volver para entregar el testigo al siguiente compañero hasta completar el ciclo.</p>
+                  <p class="game-text">Cada grupo se alineará en la línea de salida (Recomendación: colocar al alumnado por niveles). 
+                  Cada corredor debe sprintar hasta el cono de retorno y volver para entregar el testigo al siguiente compañero 
+                  hasta completar el ciclo.</p>
                   <div class="game-scoring-rule">
-                    <strong>Sistema de Puntos:</strong> El equipo que gane la carrera conseguirá <strong>5 puntos</strong>. La prueba completa se disputará 3 veces de forma independiente.
+                    <strong>Sistema de Puntos:</strong> El equipo que gane la carrera conseguirá <strong>5 puntos</strong>. 
+                    La prueba completa se disputará 3 veces de forma independiente.
                   </div>
                 </div>
               </div>
@@ -341,9 +347,12 @@ export const HomeGames = async () => {
                     <span class="game-number-badge">Juego 3</span>
                     <h4>Baloncesto con cubos</h4>
                   </div>
-                  <p class="game-text">Un reto divertido de complicidad y puntería por parejas. Un miembro de la pareja sostiene un cubo sobre su cabeza estando de espaldas al lanzador, mientras el otro sostiene la pelota. Antes del lanzamiento, el lanzador debe anunciar la distancia elegida. El receptor del cubo debe posicionarse rápidamente en esa marca e intentar atrapar la pelota sin mirar.</p>
+                  <p class="game-text">Cada grupo estará dividido en parejas. Uno de la pareja tendrá un cubo y el otro tendrá una pelota. 
+                  Habrá 3 distancias, cerca(1), media(2) y lejana(3). La persona que tenga la pelota tendrá que decir a que distancia querrá 
+                  tirar la pelota. Si dice distancia cerca(1), la persona del cubo tendrá que ponerse en esa distancia y esperar a que tire la pelota estando de espaldas</p>
                   <div class="game-scoring-rule">
-                    <strong>Sistema de Puntos:</strong> Encestar de espaldas en posición cercana vale <strong>1 punto</strong>, en posición media <strong>2 puntos</strong> y en posición lejana <strong>3 puntos</strong>.
+                    <strong>Sistema de Puntos:</strong> Encestar de espaldas en posición cercana vale <strong>1 punto</strong>, 
+                    en posición media <strong>2 puntos</strong> y en posición lejana <strong>3 puntos</strong>.
                   </div>
                 </div>
               </div>
@@ -356,11 +365,15 @@ export const HomeGames = async () => {
                 <div class="game-info">
                   <div class="game-header-row">
                     <span class="game-number-badge">Juego 4</span>
-                    <h4>Salto de longitud</h4>
+                    <h4>Saltos pies juntos</h4>
                   </div>
-                  <p class="game-text">Una prueba de salto de longitud encadenado a pies juntos. El primer participante del equipo realiza un salto desde la línea de salida y se queda inmóvil en el punto exacto de su caída. El siguiente compañero se sitúa inmediatamente al lado de la marca de sus talones y salta desde allí, repitiendo el proceso sucesivamente para todo el grupo.</p>
+                  <p class="game-text">Una prueba de salto de longitud encadenado a pies juntos. El primer participante del equipo realiza 
+                un salto desde la línea de salida y se queda inmóvil en el punto exacto de su caída. El siguiente compañero se sitúa 
+                inmediatamente al lado de la marca de sus talones y salta desde allí, repitiendo el proceso sucesivamente para todo 
+                  el grupo.</p>
                   <div class="game-scoring-rule">
-                    <strong>Sistema de Puntos:</strong> El equipo que consiga una distancia acumulada más larga ganará <strong>5 puntos</strong> en la ronda. Se realizará 3 veces.
+                    <strong>Sistema de Puntos:</strong> El equipo que consiga una distancia acumulada más larga ganará 
+                    <strong>5 puntos</strong> en la ronda. Se realizará 3 veces.
                   </div>
                 </div>
               </div>
@@ -382,9 +395,12 @@ export const HomeGames = async () => {
                     <span class="game-number-badge">Juego 1</span>
                     <h4>El Pasa Aros</h4>
                   </div>
-                  <p class="game-text">Prueba de flexibilidad, velocidad y trabajo en equipo. Todos los integrantes del grupo deben tomarse de las manos formando una cadena humana ininterrumpida. El objetivo es deslizar un aro desde el primer participante hasta el último haciendo pasar todo el cuerpo por dentro del aro, sin soltarse ni romper la cadena en ningún momento.</p>
+                  <p class="game-text">Todos los integrantes del grupo deben situarse como los niños que aparecen en la foto.
+                  El objetivo es deslizar un aro desde el primer participante hasta el último haciendo pasar todo el cuerpo por dentro del aro, sin soltarse ni romper la cadena 
+                  en ningún momento.</p>
                   <div class="game-scoring-rule">
-                    <strong>Sistema de Puntos:</strong> El equipo más rápido en completar el recorrido del aro obtiene <strong>5 puntos</strong>. Se realizarán 3 carreras completas.
+                    <strong>Sistema de Puntos:</strong> El equipo más rápido en completar el recorrido del aro obtiene 
+                    <strong>5 puntos</strong>. Se realizarán 3 carreras completas.
                   </div>
                 </div>
               </div>
@@ -399,9 +415,13 @@ export const HomeGames = async () => {
                     <span class="game-number-badge">Juego 2</span>
                     <h4>El vaso y la pajita</h4>
                   </div>
-                  <p class="game-text">Una prueba de precisión y soplido/equilibrio por relevos. Cada participante del equipo se coloca una pajita en la boca. Se inicia el recorrido con un vaso de plástico boca abajo insertado en la pajita del primer compañero. Deben pasarse el vaso uno a uno usando únicamente las pajitas, quedando prohibido tocar el vaso con las manos.</p>
+                  <p class="game-text"> Cada participante del equipo se coloca 
+                  una pajita en la boca. Se inicia el recorrido con un vaso de plástico boca abajo insertado en la pajita del primer 
+                  compañero. Deben pasarse el vaso uno a uno usando únicamente las pajitas, quedando prohibido tocar el vaso con las 
+                  manos.</p>
                   <div class="game-scoring-rule">
-                    <strong>Sistema de Puntos:</strong> Se otorgarán <strong>10 puntos</strong> si el vaso recorre el grupo completo sin caer, y <strong>5 puntos</strong> si llega al menos a la mitad del trayecto.
+                    <strong>Sistema de Puntos:</strong> Se otorgarán <strong>10 puntos</strong> si el vaso recorre el grupo completo 
+                    sin caer, y <strong>5 puntos</strong> si llega al menos a la mitad del trayecto.
                   </div>
                 </div>
               </div>
@@ -416,9 +436,12 @@ export const HomeGames = async () => {
                     <span class="game-number-badge">Juego 3</span>
                     <h4>Roba pañuelos</h4>
                   </div>
-                  <p class="game-text">Un emocionante juego táctico de agilidad y evasión en zona delimitada. Cada participante se cuelga un pañuelo por detrás del pantalón (debe estar visible y bastante sacado). El objetivo es quitar los pañuelos del equipo rival mientras evitas que te quiten el tuyo. Si te quitan el pañuelo pero tienes otro capturado, puedes colocártelo para seguir jugando.</p>
+                  <p class="game-text">Un emocionante juego táctico de agilidad y evasión en zona delimitada. Cada participante se 
+                  cuelga un pañuelo por detrás del pantalón (debe estar visible y bastante sacado). El objetivo es quitar los pañuelos 
+                  del equipo rival mientras evitas que te quiten el tuyo. Si te quitan el pañuelo estás eliminado</p>
                   <div class="game-scoring-rule">
-                    <strong>Sistema de Puntos:</strong> Gana <strong>5 puntos</strong> el equipo que logre capturar todos los pañuelos del equipo rival. Se jugarán 3 partidas completas.
+                    <strong>Sistema de Puntos:</strong> Gana <strong>5 puntos</strong> el equipo que logre capturar todos los 
+                    pañuelos del equipo rival. Se jugarán 3 partidas completas.
                   </div>
                 </div>
               </div>
@@ -433,9 +456,12 @@ export const HomeGames = async () => {
                     <span class="game-number-badge">Juego 4</span>
                     <h4>Roba Pelotas</h4>
                   </div>
-                  <p class="game-text">Duelo rápido de estrategia. Cada equipo cuenta con un aro que contiene pelotas de tenis en su interior. El juego consiste en correr y llevar las pelotas dentro del aro del equipo contrario sin que se salgan. Reglas estrictas: solo se permite transportar una sola pelota a la vez y no se permite empujar a los rivales.</p>
+                  <p class="game-text">Duelo rápido de estrategia. Cada equipo cuenta con un aro que contiene pelotas de tenis en 
+                  su interior. El juego consiste en correr y llevar las pelotas dentro del aro del equipo contrario sin que se salgan. 
+                  Reglas estrictas: solo se permite transportar una sola pelota a la vez y no se permite empujar a los rivales.</p>
                   <div class="game-scoring-rule">
-                    <strong>Sistema de Puntos:</strong> Se disputarán 3 partidas rápidas y por cada victoria el equipo conseguirá <strong>5 puntos</strong>.
+                    <strong>Sistema de Puntos:</strong> Se disputarán 3 partidas rápidas y por cada 
+                    victoria el equipo conseguirá <strong>5 puntos</strong>.
                   </div>
                 </div>
               </div>
@@ -450,12 +476,12 @@ export const HomeGames = async () => {
   // Controladores de eventos para cambiar entre las pestañas del cronograma
   const botonesPestañasCronograma = contenedorPrincipal.querySelectorAll(".sch-tab-btn");
   const panelesCronograma = contenedorPrincipal.querySelectorAll(".sch-pane");
-  
+
   botonesPestañasCronograma.forEach(pestaña => {
     pestaña.addEventListener("click", () => {
       botonesPestañasCronograma.forEach(t => t.classList.remove("active"));
       panelesCronograma.forEach(p => p.classList.remove("active"));
-      
+
       pestaña.classList.add("active");
       const panelActivo = contenedorPrincipal.querySelector(`#sch-pane-${pestaña.dataset.day}`);
       if (panelActivo) panelActivo.classList.add("active");
@@ -465,12 +491,12 @@ export const HomeGames = async () => {
   // Controladores de eventos para cambiar entre las pestañas de profesores (Staff)
   const botonesPestañasStaff = contenedorPrincipal.querySelectorAll(".staff-tab-btn");
   const panelesStaff = contenedorPrincipal.querySelectorAll(".staff-pane");
-  
+
   botonesPestañasStaff.forEach(pestaña => {
     pestaña.addEventListener("click", () => {
       botonesPestañasStaff.forEach(t => t.classList.remove("active"));
       panelesStaff.forEach(p => p.classList.remove("active"));
-      
+
       pestaña.classList.add("active");
       const panelActivo = contenedorPrincipal.querySelector(`#staff-pane-${pestaña.dataset.staffDay}`);
       if (panelActivo) panelActivo.classList.add("active");
